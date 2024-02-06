@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
+import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -36,12 +37,38 @@ public class UserService {
             throw new ConflictException("E-mail already exists.");
         }
 
-        String password_hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        String password_hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(6));
 
         user.setPassword(password_hash);
 
         User newUser = this.userRepository.save(user);
 
         return newUser;
+    }
+
+    // TODO: BETTER VALIDATIONS TO UPDATE AN USER PASSWORD EX: SECURITY QUESTIONS OR NEW PASSWORD
+    // VIA E-MAIL
+    public User forgotPassword(User user) {
+        if (user == null) {
+            throw new BadRequestException("User can't be null.");
+        }
+
+        Optional<User> doesUserExists = this.userRepository.findByEmail(user.getEmail());
+
+        if (doesUserExists.isEmpty()) {
+            throw new NotFoundException("User not found.");
+        }
+
+        if (user.getPassword().length() < 6) {
+            throw new BadRequestException("Password must have at least 6 characters.");
+        }
+
+        String hashNewPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(6));
+
+        doesUserExists.get().setPassword(hashNewPassword);
+
+        User userUpdated = this.userRepository.save(doesUserExists.get());
+
+        return userUpdated;
     }
 }

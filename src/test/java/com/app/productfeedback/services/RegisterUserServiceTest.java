@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.app.productfeedback.entities.User;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-@Service
 public class RegisterUserServiceTest {
     protected BCrypt bcrypt = new BCrypt();
 
@@ -38,7 +36,7 @@ public class RegisterUserServiceTest {
 
     @Test
     @DisplayName("it should register a new user")
-    void shouldRegisterANewUser() {
+    void caseOne() {
         User newUser = new User();
 
         newUser.setEmail("johndoe@test.com");
@@ -58,7 +56,7 @@ public class RegisterUserServiceTest {
 
     @Test
     @DisplayName("it not should register a new user if user already exists")
-    void shouldNotRegisterANewUser() throws Exception {
+    void caseTwo() throws Exception {
         User newUser = new User();
 
         newUser.setEmail("johndoe@test.com");
@@ -76,7 +74,7 @@ public class RegisterUserServiceTest {
 
     @Test
     @DisplayName("it not should register a new user if password has less than 6 characters")
-    void passwordLengthRegister() throws Exception {
+    void caseThree() throws Exception {
         User newUser = new User();
 
         newUser.setEmail("johndoe@test.com");
@@ -92,7 +90,7 @@ public class RegisterUserServiceTest {
 
     @Test
     @DisplayName("it not should register a new user if parameter User is null")
-    void nullUserRegister() throws Exception {
+    void caseFour() throws Exception {
         User newUser = null;
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
