@@ -99,5 +99,4 @@ public class RegisterUserServiceTest {
 
         Assertions.assertEquals("User can't be null.", thrown.getMessage());
     }
-
 }

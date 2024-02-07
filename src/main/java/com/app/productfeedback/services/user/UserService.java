@@ -9,13 +9,13 @@ import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
-
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    protected BCrypt bcrypt = new BCrypt();
+    protected BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder(6);
 
     private final UserRepositoryInterface userRepository;
 
@@ -38,7 +38,7 @@ public class UserService {
             throw new ConflictException("E-mail already exists.");
         }
 
-        String password_hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(6));
+        String password_hash = bcrypt.encode(user.getPassword());
 
         user.setPassword(password_hash);
 
@@ -64,7 +64,7 @@ public class UserService {
             throw new BadRequestException("Password must have at least 6 characters.");
         }
 
-        String hashNewPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(6));
+        String hashNewPassword = bcrypt.encode(user.getPassword());
 
         doesUserExists.get().setPassword(hashNewPassword);
 
@@ -86,12 +86,55 @@ public class UserService {
 
         User getUser = doesUserExists.get();
 
-        boolean doesPasswordMatches = BCrypt.checkpw(user.getPassword(), getUser.getPassword());
+        boolean doesPasswordMatches = bcrypt.matches(user.getPassword(), getUser.getPassword());
 
         if (!doesPasswordMatches) {
             throw new ForbiddenException("Wrong credentials.");
         }
 
         return getUser;
+    }
+
+    public User updateProfile(User userUpdated) {
+        if (userUpdated == null) {
+            throw new BadRequestException("User can't be null.");
+        }
+
+        if (userUpdated.getId() == null) {
+            throw new BadRequestException("User id can't be null.");
+        }
+
+        Optional<User> doesUserExists = this.userRepository.findById(userUpdated.getId());
+
+        if (doesUserExists.isEmpty()) {
+            throw new NotFoundException("User not found.");
+        }
+
+        if (userUpdated.getEmail() != null) {
+            Optional<User> emailAlreadyExists =
+                    this.userRepository.findByEmail(userUpdated.getEmail());
+
+            if (emailAlreadyExists.isPresent()) {
+                throw new ConflictException("E-mail already exists.");
+            }
+        }
+
+        User getUser = doesUserExists.get();
+
+        if (userUpdated.getPassword() != null) {
+            if (userUpdated.getPassword().length() < 6) {
+                throw new BadRequestException("Password must have at least 6 characters.");
+            }
+
+            String hashedNewPassword = this.bcrypt.encode(userUpdated.getPassword());
+
+            userUpdated.setPassword(hashedNewPassword);
+        }
+
+        BeanUtils.copyProperties(userUpdated, getUser);
+
+        User performUpdate = this.userRepository.save(getUser);
+
+        return performUpdate;
     }
 }

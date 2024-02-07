@@ -1,6 +1,7 @@
 package com.app.productfeedback.repositories;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,7 +24,24 @@ public class UserRepositoryTest implements UserRepositoryInterface {
 
     @Override
     public User save(User user) {
-        this.users.add(user);
+        Optional<User> doesUserExists =
+                this.users.stream().filter(users -> users.getId().equals(user.getId())).findAny();
+
+        if (doesUserExists.isEmpty()) {
+            user.setId(UUID.randomUUID());
+
+            this.users.add(user);
+        } else {
+            // BeanUtils.copyProperties(user, doesUserExists);
+        }
+
+        return user;
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        Optional<User> user =
+                this.users.stream().filter(users -> users.getId().equals(userId)).findAny();
 
         return user;
     }
