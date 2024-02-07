@@ -14,8 +14,8 @@ import com.app.productfeedback.repositories.UserRepositoryTest;
 import com.app.productfeedback.services.user.UserService;
 
 import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")

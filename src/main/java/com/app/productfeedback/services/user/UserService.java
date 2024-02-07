@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
+import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     protected BCrypt bcrypt = new BCrypt();
 
-    private UserRepositoryInterface userRepository;
+    private final UserRepositoryInterface userRepository;
 
     public UserService(UserRepositoryInterface userRepository) {
         this.userRepository = userRepository;
@@ -70,5 +71,27 @@ public class UserService {
         User userUpdated = this.userRepository.save(doesUserExists.get());
 
         return userUpdated;
+    }
+
+    public User auth(User user) {
+        if (user == null) {
+            throw new BadRequestException("User can't be null.");
+        }
+
+        Optional<User> doesUserExists = this.userRepository.findByEmail(user.getEmail());
+
+        if (doesUserExists.isEmpty()) {
+            throw new NotFoundException("User not found.");
+        }
+
+        User getUser = doesUserExists.get();
+
+        boolean doesPasswordMatches = BCrypt.checkpw(user.getPassword(), getUser.getPassword());
+
+        if (!doesPasswordMatches) {
+            throw new ForbiddenException("Wrong credentials.");
+        }
+
+        return getUser;
     }
 }
