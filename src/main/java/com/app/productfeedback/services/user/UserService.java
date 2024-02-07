@@ -1,6 +1,7 @@
 package com.app.productfeedback.services.user;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
@@ -32,6 +33,10 @@ public class UserService {
             throw new BadRequestException("Password must have at least 6 characters.");
         }
 
+        if (user.getSecretAnswer() == null || user.getSecretQuestion() == null) {
+            throw new BadRequestException("Secret question and answer must be provided.");
+        }
+
         Optional<User> doesUserAlreadyExists = this.userRepository.findByEmail(user.getEmail());
 
         if (doesUserAlreadyExists.isPresent()) {
@@ -47,8 +52,6 @@ public class UserService {
         return newUser;
     }
 
-    // TODO: BETTER VALIDATIONS TO UPDATE AN USER PASSWORD EX: SECURITY QUESTIONS OR NEW PASSWORD
-    // VIA E-MAIL
     public User forgotPassword(User user) {
         if (user == null) {
             throw new BadRequestException("User can't be null.");
@@ -60,15 +63,34 @@ public class UserService {
             throw new NotFoundException("User not found.");
         }
 
+        if (user.getSecretAnswer() == null || user.getSecretQuestion() == null) {
+            throw new BadRequestException("Secret answer and question must be provided.");
+        }
+
+        User getUser = doesUserExists.get();
+
+        boolean userSecretQuestionMatch =
+                getUser.getSecretQuestion().equals(user.getSecretQuestion());
+
+        boolean userSecretAnswer = getUser.getSecretAnswer().equals(user.getSecretAnswer());
+
+        if (!userSecretQuestionMatch) {
+            throw new ForbiddenException("Secret question doesn't match.");
+        }
+
+        if (!userSecretAnswer) {
+            throw new ForbiddenException("Secret answer doesn't match.");
+        }
+
         if (user.getPassword().length() < 6) {
             throw new BadRequestException("Password must have at least 6 characters.");
         }
 
-        String hashNewPassword = bcrypt.encode(user.getPassword());
+        String hashNewPassword = this.bcrypt.encode(user.getPassword());
 
-        doesUserExists.get().setPassword(hashNewPassword);
+        getUser.setPassword(hashNewPassword);
 
-        User userUpdated = this.userRepository.save(doesUserExists.get());
+        User userUpdated = this.userRepository.save(getUser);
 
         return userUpdated;
     }
@@ -86,7 +108,8 @@ public class UserService {
 
         User getUser = doesUserExists.get();
 
-        boolean doesPasswordMatches = bcrypt.matches(user.getPassword(), getUser.getPassword());
+        boolean doesPasswordMatches =
+                this.bcrypt.matches(user.getPassword(), getUser.getPassword());
 
         if (!doesPasswordMatches) {
             throw new ForbiddenException("Wrong credentials.");
@@ -136,5 +159,19 @@ public class UserService {
         User performUpdate = this.userRepository.save(getUser);
 
         return performUpdate;
+    }
+
+    public User profile(UUID userId) {
+        if (userId == null) {
+            throw new BadRequestException("User can't be null.");
+        }
+
+        Optional<User> doesUserExists = this.userRepository.findById(userId);
+
+        if (doesUserExists.isEmpty()) {
+            throw new NotFoundException("User not found.");
+        }
+
+        return doesUserExists.get();
     }
 }

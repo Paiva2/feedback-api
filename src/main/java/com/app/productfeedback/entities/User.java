@@ -41,6 +41,12 @@ public class User {
     @Column(name = "profile_picture_url")
     private String profilePictureUrl;
 
+    @Column(name = "secret_question")
+    private String secretQuestion;
+
+    @Column(name = "secret_answer")
+    private String secretAnswer;
+
     public User() {}
 
     public UUID getId() {
@@ -98,5 +104,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
     }
 }

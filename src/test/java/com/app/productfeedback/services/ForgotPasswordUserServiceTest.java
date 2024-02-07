@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
+import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
 import com.app.productfeedback.repositories.UserRepositoryTest;
@@ -71,6 +72,7 @@ public class ForgotPasswordUserServiceTest {
         Assertions.assertEquals("User not found.", thrown.getMessage());
     }
 
+
     @Test
     @DisplayName("it should not update an user password if password has less than 6 characters")
     public void caseFour() {
@@ -85,15 +87,51 @@ public class ForgotPasswordUserServiceTest {
         Assertions.assertEquals("Password must have at least 6 characters.", thrown.getMessage());
     }
 
+    @Test
+    @DisplayName("it should not update an user password if secret answer is wrong")
+    public void caseFive() {
+        User userCreation = this.userCreation();
+        User userToUpdate = new User();
+
+        userToUpdate.setEmail(userCreation.getEmail());
+        userToUpdate.setSecretQuestion("Fav Band");
+        userToUpdate.setSecretAnswer("Wrong Answer");
+
+        Exception thrown = Assertions.assertThrows(ForbiddenException.class, () -> {
+            this.userService.forgotPassword(userToUpdate);
+        });
+
+        Assertions.assertEquals("Secret answer doesn't match.", thrown.getMessage());
+    }
+
+    @Test
+    @DisplayName("it should not update an user password if secret question is wrong")
+    public void caseSix() {
+        User userCreation = this.userCreation();
+        User userToUpdate = new User();
+
+        userToUpdate.setEmail(userCreation.getEmail());
+        userToUpdate.setSecretQuestion("Wrong question");
+        userToUpdate.setSecretAnswer("The Beatles");
+
+        Exception thrown = Assertions.assertThrows(ForbiddenException.class, () -> {
+            this.userService.forgotPassword(userToUpdate);
+        });
+
+        Assertions.assertEquals("Secret question doesn't match.", thrown.getMessage());
+    }
+
     protected User userCreation() {
         User newUser = new User();
 
         newUser.setEmail("johndoe@test.com");
         newUser.setPassword("123456");
         newUser.setUsername("John Doe");
+        newUser.setSecretQuestion("Fav Band");
+        newUser.setSecretAnswer("The Beatles");
 
-        this.userService.register(newUser);
+        User createdUser = this.userService.register(newUser);
 
-        return newUser;
+        return createdUser;
     }
 }

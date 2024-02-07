@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import com.app.productfeedback.entities.User;
@@ -32,7 +32,7 @@ public class UserRepositoryTest implements UserRepositoryInterface {
 
             this.users.add(user);
         } else {
-            // BeanUtils.copyProperties(user, doesUserExists);
+            BeanUtils.copyProperties(user, doesUserExists);
         }
 
         return user;

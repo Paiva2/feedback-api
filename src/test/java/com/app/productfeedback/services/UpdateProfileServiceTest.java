@@ -93,6 +93,8 @@ public class UpdateProfileServiceTest {
         existentEmail.setEmail("existentuser@test.com");
         existentEmail.setPassword("123456");
         existentEmail.setUsername("Existent user");
+        existentEmail.setSecretQuestion("Fav Band");
+        existentEmail.setSecretAnswer("The Beatles");
 
         this.userService.register(existentEmail);
 
@@ -127,6 +129,8 @@ public class UpdateProfileServiceTest {
         newUser.setEmail("johndoe@test.com");
         newUser.setPassword("123456");
         newUser.setUsername("John Doe");
+        newUser.setSecretQuestion("Fav Band");
+        newUser.setSecretAnswer("The Beatles");
 
         User creation = this.userService.register(newUser);
 

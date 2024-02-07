@@ -42,6 +42,8 @@ public class RegisterUserServiceTest {
         newUser.setEmail("johndoe@test.com");
         newUser.setPassword("123456");
         newUser.setUsername("John Doe");
+        newUser.setSecretQuestion("Fav Band");
+        newUser.setSecretAnswer("The Beatles");
 
         User userCreated = this.userService.register(newUser);
 
@@ -62,6 +64,8 @@ public class RegisterUserServiceTest {
         newUser.setEmail("johndoe@test.com");
         newUser.setPassword("123456");
         newUser.setUsername("John Doe");
+        newUser.setSecretQuestion("Fav Band");
+        newUser.setSecretAnswer("The Beatles");
 
         this.userService.register(newUser);
 
@@ -80,6 +84,8 @@ public class RegisterUserServiceTest {
         newUser.setEmail("johndoe@test.com");
         newUser.setPassword("12345");
         newUser.setUsername("John Doe");
+        newUser.setSecretQuestion("Fav Band");
+        newUser.setSecretAnswer("The Beatles");
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
             this.userService.register(newUser);
@@ -98,5 +104,24 @@ public class RegisterUserServiceTest {
         });
 
         Assertions.assertEquals("User can't be null.", thrown.getMessage());
+    }
+
+
+    @Test
+    @DisplayName("it not should register a new user if secret question and answer are not provided")
+    void caseSix() throws Exception {
+        User newUser = new User();
+
+        newUser.setEmail("johndoe@test.com");
+        newUser.setPassword("123456");
+        newUser.setUsername("John Doe");
+        newUser.setSecretQuestion("Fav Band");
+
+        Exception thrownError = Assertions.assertThrows(BadRequestException.class, () -> {
+            this.userService.register(newUser);
+        });
+
+        Assertions.assertEquals("Secret question and answer must be provided.",
+                thrownError.getMessage());
     }
 }

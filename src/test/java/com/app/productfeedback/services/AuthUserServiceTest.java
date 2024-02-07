@@ -90,6 +90,8 @@ public class AuthUserServiceTest {
         newUser.setEmail("johndoe@test.com");
         newUser.setPassword("123456");
         newUser.setUsername("John Doe");
+        newUser.setSecretQuestion("Fav Band");
+        newUser.setSecretAnswer("The Beatles");
 
         this.userService.register(newUser);
 
