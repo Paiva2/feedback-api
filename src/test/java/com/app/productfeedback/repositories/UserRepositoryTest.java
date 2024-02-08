@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import com.app.productfeedback.entities.User;
-import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.UserRepositoryInterface;
 
 @Repository
 public class UserRepositoryTest implements UserRepositoryInterface {

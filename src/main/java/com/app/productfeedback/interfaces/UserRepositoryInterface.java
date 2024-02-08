@@ -1,4 +1,4 @@
-package com.app.productfeedback.interfaces.user;
+package com.app.productfeedback.interfaces;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -11,8 +11,7 @@ import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
 import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
-import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
-
+import com.app.productfeedback.interfaces.UserRepositoryInterface;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

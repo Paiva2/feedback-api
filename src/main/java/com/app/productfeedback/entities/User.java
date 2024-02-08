@@ -8,9 +8,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import com.app.productfeedback.enums.UserRole;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,6 +50,9 @@ public class User {
 
     @Column(name = "secret_answer")
     private String secretAnswer;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public User() {}
 
@@ -120,5 +127,13 @@ public class User {
 
     public void setSecretAnswer(String secretAnswer) {
         this.secretAnswer = secretAnswer;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }

@@ -1,4 +1,4 @@
-package com.app.productfeedback.services;
+package com.app.productfeedback.services.user;
 
 import java.util.Map;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.app.productfeedback.services;
+package com.app.productfeedback.services.user;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
-import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.UserRepositoryInterface;
 import com.app.productfeedback.repositories.UserRepositoryTest;
 import com.app.productfeedback.services.user.UserService;
 

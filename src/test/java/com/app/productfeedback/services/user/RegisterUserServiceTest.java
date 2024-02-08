@@ -1,4 +1,4 @@
-package com.app.productfeedback.services;
+package com.app.productfeedback.services.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

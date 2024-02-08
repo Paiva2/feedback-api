@@ -1,4 +1,4 @@
-package com.app.productfeedback.services;
+package com.app.productfeedback.services.user;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
-import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.UserRepositoryInterface;
 import com.app.productfeedback.repositories.UserRepositoryTest;
 import com.app.productfeedback.services.user.UserService;
 
