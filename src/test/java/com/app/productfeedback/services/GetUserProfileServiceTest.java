@@ -1,5 +1,6 @@
 package com.app.productfeedback.services;
 
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,12 +39,12 @@ public class GetUserProfileServiceTest {
 
         this.userService.register(userCreation);
 
-        User userProfile = this.userService.profile(userCreation.getId());
+        Map<String, Object> userProfile = this.userService.profile(userCreation.getId());
 
         Assertions.assertNotNull(userProfile);
-        Assertions.assertEquals(userProfile.getEmail(), "johndoe@test.com");
-        Assertions.assertEquals(userProfile.getUsername(), "John Doe");
-        Assertions.assertEquals(userProfile.getId(), userCreation.getId());
+        Assertions.assertEquals(userProfile.get("email"), "johndoe@test.com");
+        Assertions.assertEquals(userProfile.get("username"), "John Doe");
+        Assertions.assertEquals(userProfile.get("id"), userCreation.getId());
     }
 
     @Test

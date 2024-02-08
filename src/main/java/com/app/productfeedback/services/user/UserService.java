@@ -1,5 +1,8 @@
 package com.app.productfeedback.services.user;
 
+import java.beans.PropertyDescriptor;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,7 +13,8 @@ import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.user.UserRepositoryInterface;
 
-import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -154,14 +158,29 @@ public class UserService {
             userUpdated.setPassword(hashedNewPassword);
         }
 
-        BeanUtils.copyProperties(userUpdated, getUser);
+        BeanWrapper updatedCopy = new BeanWrapperImpl(userUpdated);
+        BeanWrapper sourceCopy = new BeanWrapperImpl(getUser);
+
+        PropertyDescriptor[] fieldsToUpdate = updatedCopy.getPropertyDescriptors();
+
+        for (PropertyDescriptor field : fieldsToUpdate) {
+            String fieldName = field.getName();
+            Object fieldValue = updatedCopy.getPropertyValue(fieldName);
+
+            boolean canUpdate = fieldValue != null && fieldName.hashCode() != "id".hashCode()
+                    && fieldName.hashCode() != "class".hashCode();
+
+            if (canUpdate) {
+                sourceCopy.setPropertyValue(fieldName, fieldValue);
+            }
+        }
 
         User performUpdate = this.userRepository.save(getUser);
 
         return performUpdate;
     }
 
-    public User profile(UUID userId) {
+    public Map<String, Object> profile(UUID userId) {
         if (userId == null) {
             throw new BadRequestException("User can't be null.");
         }
@@ -172,6 +191,16 @@ public class UserService {
             throw new NotFoundException("User not found.");
         }
 
-        return doesUserExists.get();
+        Map<String, Object> formattedUser = new LinkedHashMap<>();
+
+        User getUser = doesUserExists.get();
+
+        formattedUser.put("id", getUser.getId());
+        formattedUser.put("email", getUser.getEmail());
+        formattedUser.put("username", getUser.getUsername());
+        formattedUser.put("secretQuestion", getUser.getSecretQuestion());
+        formattedUser.put("createdAt", getUser.getCreatedAt());
+
+        return formattedUser;
     }
 }

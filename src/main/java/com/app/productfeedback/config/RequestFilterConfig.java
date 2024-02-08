@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.app.productfeedback.entities.User;
-import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.repositories.UserRepositoryImpl;
 import com.app.productfeedback.services.jwt.JwtService;
@@ -37,19 +36,21 @@ public class RequestFilterConfig extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
         String getToken = this.retrieveHeaderToken(request);
 
-        String retrieveToken = this.jwtService.verify(getToken);
+        if (getToken != null) {
+            String retrieveToken = this.jwtService.verify(getToken);
 
-        UUID userId = UUID.fromString(retrieveToken);
+            UUID userId = UUID.fromString(retrieveToken);
 
-        Optional<User> user = this.userRepositoryImpl.findById(userId);
+            Optional<User> user = this.userRepositoryImpl.findById(userId);
 
-        if (user.isEmpty()) {
-            throw new NotFoundException("Token error - User not found.");
+            if (user.isEmpty()) {
+                throw new NotFoundException("Token error - User not found.");
+            }
+
+            var authentication = new UsernamePasswordAuthenticationToken(user, retrieveToken, null);
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
-        var authentication = new UsernamePasswordAuthenticationToken(user, retrieveToken, null);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }
@@ -58,9 +59,9 @@ public class RequestFilterConfig extends OncePerRequestFilter {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null) {
-            throw new ForbiddenException("Authorization token not found.");
+            return null;
         }
 
-        return authHeader.replace("Bearer", "");
+        return authHeader.replaceAll("Bearer", "");
     }
 }

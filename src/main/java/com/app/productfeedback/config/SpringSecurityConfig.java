@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,11 +18,15 @@ public class SpringSecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String[] authNeededGets = {"/api/v1/user/profile"};
+        String[] authNeededPatchs = {"/api/v1/user/update"};
+
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers(HttpMethod.GET, "/profile").authenticated()
+                    authorize.requestMatchers(HttpMethod.POST, authNeededGets).authenticated();
+                    authorize.requestMatchers(HttpMethod.PATCH, authNeededPatchs).authenticated()
                             .anyRequest().permitAll();
                 }).addFilterBefore(requestFilterConfig, UsernamePasswordAuthenticationFilter.class)
                 .build();
