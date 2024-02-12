@@ -7,5 +7,5 @@ import com.app.productfeedback.interfaces.CategoryRepositoryInterface;
 
 
 public interface CategoryRepositoryImpl
-        extends CategoryRepositoryInterface, JpaRepository<Category, UUID> {
+                extends CategoryRepositoryInterface, JpaRepository<Category, UUID> {
 }

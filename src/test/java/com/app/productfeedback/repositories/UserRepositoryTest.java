@@ -12,6 +12,7 @@ import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.interfaces.UserRepositoryInterface;
 
+@SuppressWarnings("null")
 @Repository
 public class UserRepositoryTest implements UserRepositoryInterface {
     private List<User> users = new ArrayList<>();
