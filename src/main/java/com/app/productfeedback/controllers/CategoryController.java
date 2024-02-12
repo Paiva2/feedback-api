@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.productfeedback.dto.request.category.NewCategoryDto;
-import com.app.productfeedback.dto.response.ListAllCategoriesDto;
+import com.app.productfeedback.dto.response.category.ListAllCategoriesDto;
 import com.app.productfeedback.entities.Category;
 import com.app.productfeedback.services.category.CategoryService;
 import com.app.productfeedback.services.jwt.JwtService;

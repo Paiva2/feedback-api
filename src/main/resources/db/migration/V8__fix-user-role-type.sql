@@ -1,1 +1,0 @@
-ALTER TABLE tb_users ADD role userRole NOT NULL DEFAULT 'USER';

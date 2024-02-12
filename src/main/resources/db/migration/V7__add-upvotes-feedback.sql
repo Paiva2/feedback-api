@@ -1,0 +1,1 @@
+ALTER TABLE tb_feedbacks ADD up_votes INT NOT NULL DEFAULT 0;

@@ -19,14 +19,12 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 import com.app.productfeedback.enums.UserRole;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-@Table(name = "tb_users")
+@Entity(name = "tb_users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -59,7 +57,7 @@ public class User implements UserDetails {
     private String secretAnswer;
 
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private UserRole role = UserRole.USER;
 
     public User() {}
 
@@ -136,6 +134,7 @@ public class User implements UserDetails {
         this.secretAnswer = secretAnswer;
     }
 
+    @JsonIgnore
     public UserRole getRole() {
         return role;
     }
@@ -144,6 +143,7 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> roles = new ArrayList<>();

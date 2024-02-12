@@ -85,8 +85,6 @@ public class CategoryService {
         Optional<Category> doesCategoryExists =
                 this.categoryRepositoryInterface.findById(categoryId);
 
-        System.out.println(doesCategoryExists);
-
         if (doesCategoryExists.isEmpty()) {
             throw new NotFoundException("Category not found.");
         }

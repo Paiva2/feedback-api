@@ -2,12 +2,17 @@ package com.app.productfeedback.services.feedback;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.app.productfeedback.dto.request.feedback.NewFeedbackDto;
 import com.app.productfeedback.entities.Category;
 import com.app.productfeedback.entities.Feedback;
 import com.app.productfeedback.entities.User;
+import com.app.productfeedback.enums.FeedbackStatus;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.CategoryRepository;
@@ -58,5 +63,27 @@ public class FeedbackService {
         newFeedback.setDetails(dto.getDetails());
 
         return this.feedbackRepository.save(newFeedback);
+    }
+
+    public Page<Feedback> listAll(int page, int perPage, FeedbackStatus filterBy) {
+        if (page < 1) {
+            page = 1;
+        }
+
+        if (perPage < 5) {
+            perPage = 5;
+        }
+
+        Pageable pageable = PageRequest.of((page - 1), perPage);
+
+        Page<Feedback> list = null;
+
+        if (filterBy != null) {
+            list = this.feedbackRepository.findAllByStatusOrderByCreatedAtDesc(filterBy, pageable);
+        } else {
+            list = this.feedbackRepository.findAllByOrderByCreatedAtDesc(pageable);
+        }
+
+        return list;
     }
 }

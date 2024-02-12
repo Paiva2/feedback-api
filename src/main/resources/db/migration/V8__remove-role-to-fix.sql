@@ -1,0 +1,1 @@
+ALTER TABLE tb_users DROP COLUMN role;

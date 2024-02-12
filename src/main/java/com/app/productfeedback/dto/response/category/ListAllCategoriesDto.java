@@ -1,4 +1,4 @@
-package com.app.productfeedback.dto.response;
+package com.app.productfeedback.dto.response.category;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,8 +8,12 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.app.productfeedback.enums.FeedbackStatus;
+
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -40,6 +44,9 @@ public class Feedback {
 
     @Column(name = "fk_category_id")
     private UUID fkCategoryId;
+
+    @Enumerated(EnumType.STRING)
+    private FeedbackStatus status = FeedbackStatus.SUGGESTION;
 
     @OneToOne
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
@@ -123,5 +130,13 @@ public class Feedback {
 
     public void setCategoryId(Category categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public FeedbackStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FeedbackStatus status) {
+        this.status = status;
     }
 }
