@@ -10,11 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
-import com.app.productfeedback.interfaces.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.UserRepository;
 
 @SuppressWarnings("null")
 @Repository
-public class UserRepositoryTest implements UserRepositoryInterface {
+public class UserRepositoryTest implements UserRepository {
     private List<User> users = new ArrayList<>();
 
     @Override

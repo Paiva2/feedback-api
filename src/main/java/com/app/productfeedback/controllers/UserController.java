@@ -3,7 +3,7 @@ package com.app.productfeedback.controllers;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,14 +26,11 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final JwtService jwtService;
-
-    public UserController(UserService userService, JwtService jwtService) {
-        this.userService = userService;
-        this.jwtService = jwtService;
-    }
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> registerNewUser(

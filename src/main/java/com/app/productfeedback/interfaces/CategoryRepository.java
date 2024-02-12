@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.app.productfeedback.entities.Category;
 
-public interface CategoryRepositoryInterface {
+public interface CategoryRepository {
     Optional<Category> findByName(String categoryName);
 
     Optional<Category> findById(UUID categoryId);

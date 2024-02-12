@@ -11,7 +11,7 @@ import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
-import com.app.productfeedback.interfaces.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.UserRepository;
 import com.app.productfeedback.repositories.UserRepositoryTest;
 
 @ActiveProfiles("test")
@@ -20,7 +20,7 @@ public class UpdateProfileServiceTest {
 
     private UserService userService;
 
-    private UserRepositoryInterface userRepository;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setup() {

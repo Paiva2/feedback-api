@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
 import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.enums.UserRole;
@@ -13,7 +14,7 @@ import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
 import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
-import com.app.productfeedback.interfaces.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.UserRepository;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -27,9 +28,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
     protected BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder(6);
 
-    private final UserRepositoryInterface userRepository;
+    private final UserRepository userRepository;
 
-    public UserService(UserRepositoryInterface userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

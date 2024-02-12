@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.app.productfeedback.entities.User;
 
-public interface UserRepositoryInterface {
+public interface UserRepository {
 
     Optional<User> findByEmail(String userEmail);
 

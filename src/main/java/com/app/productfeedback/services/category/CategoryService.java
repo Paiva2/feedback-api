@@ -15,17 +15,17 @@ import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.exceptions.UnauthorizedException;
-import com.app.productfeedback.interfaces.CategoryRepositoryInterface;
-import com.app.productfeedback.interfaces.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.CategoryRepository;
+import com.app.productfeedback.interfaces.UserRepository;
 
 @Service
 public class CategoryService {
-    private CategoryRepositoryInterface categoryRepositoryInterface;
+    private final CategoryRepository categoryRepositoryInterface;
 
-    private UserRepositoryInterface userRepositoryInterface;
+    private final UserRepository userRepositoryInterface;
 
-    public CategoryService(CategoryRepositoryInterface categoryRepositoryInterface,
-            UserRepositoryInterface userRepositoryInterface) {
+    public CategoryService(CategoryRepository categoryRepositoryInterface,
+            UserRepository userRepositoryInterface) {
         this.categoryRepositoryInterface = categoryRepositoryInterface;
         this.userRepositoryInterface = userRepositoryInterface;
     }

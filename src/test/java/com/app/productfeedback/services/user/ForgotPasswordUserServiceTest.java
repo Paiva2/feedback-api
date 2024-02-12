@@ -9,7 +9,7 @@ import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
-import com.app.productfeedback.interfaces.UserRepositoryInterface;
+import com.app.productfeedback.interfaces.UserRepository;
 import com.app.productfeedback.repositories.UserRepositoryTest;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -22,7 +22,7 @@ public class ForgotPasswordUserServiceTest {
 
     private UserService userService;
 
-    private UserRepositoryInterface userRepository;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setup() {

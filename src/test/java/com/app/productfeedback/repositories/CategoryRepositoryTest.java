@@ -15,10 +15,10 @@ import org.springframework.data.domain.Pageable;
 import java.beans.PropertyDescriptor;
 
 import com.app.productfeedback.entities.Category;
-import com.app.productfeedback.interfaces.CategoryRepositoryInterface;
+import com.app.productfeedback.interfaces.CategoryRepository;
 
 @SuppressWarnings("null")
-public class CategoryRepositoryTest implements CategoryRepositoryInterface {
+public class CategoryRepositoryTest implements CategoryRepository {
     protected List<Category> categories = new ArrayList<>();
 
     @Override
