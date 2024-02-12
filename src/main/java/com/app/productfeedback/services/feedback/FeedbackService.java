@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.app.productfeedback.dto.request.feedback.NewFeedbackDto;
 import com.app.productfeedback.entities.Category;
 import com.app.productfeedback.entities.Feedback;
 import com.app.productfeedback.entities.User;
@@ -18,6 +17,7 @@ import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.CategoryRepository;
 import com.app.productfeedback.interfaces.FeedbackRepository;
 import com.app.productfeedback.interfaces.UserRepository;
+import com.app.productfeedback.dto.request.feedback.NewFeedbackDto;
 
 @Service
 public class FeedbackService {
@@ -85,5 +85,19 @@ public class FeedbackService {
         }
 
         return list;
+    }
+
+    public Feedback getById(UUID feedbackId) {
+        if (feedbackId == null) {
+            throw new BadRequestException("Invalid feedback id.");
+        }
+
+        Optional<Feedback> getFeedback = this.feedbackRepository.findById(feedbackId);
+
+        if (getFeedback.isEmpty()) {
+            throw new NotFoundException("Feedback not found.");
+        }
+
+        return getFeedback.get();
     }
 }

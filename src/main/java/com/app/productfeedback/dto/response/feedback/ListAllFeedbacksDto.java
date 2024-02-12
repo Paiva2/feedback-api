@@ -44,7 +44,7 @@ public class ListAllFeedbacksDto {
                     feedback.getCategoryId().getName());
 
             return new FeedbackDto(feedback.getId(), feedback.getTitle(), feedback.getDetails(),
-                    feedback.getStatus(), categoryDto);
+                    feedback.getStatus(), categoryDto, feedback.getUpVotes());
         }).toList();
     }
 }

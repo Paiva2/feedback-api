@@ -1,5 +1,7 @@
 package com.app.productfeedback.interfaces;
 
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.app.productfeedback.entities.Feedback;
@@ -11,4 +13,6 @@ public interface FeedbackRepository {
     Page<Feedback> findAllByStatusOrderByCreatedAtDesc(FeedbackStatus status, Pageable pageable);
 
     Page<Feedback> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    Optional<Feedback> findById(UUID feedbackId);
 }

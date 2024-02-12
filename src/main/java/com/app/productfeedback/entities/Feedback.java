@@ -11,13 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.app.productfeedback.enums.FeedbackStatus;
 
 import jakarta.persistence.EnumType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity(name = "tb_feedbacks")
 public class Feedback {
@@ -44,6 +38,9 @@ public class Feedback {
 
     @Column(name = "fk_category_id")
     private UUID fkCategoryId;
+
+    @Column(name = "up_votes")
+    private int upVotes;
 
     @Enumerated(EnumType.STRING)
     private FeedbackStatus status = FeedbackStatus.SUGGESTION;
@@ -138,5 +135,13 @@ public class Feedback {
 
     public void setStatus(FeedbackStatus status) {
         this.status = status;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public void setUpVotes(int upVotes) {
+        this.upVotes = upVotes;
     }
 }

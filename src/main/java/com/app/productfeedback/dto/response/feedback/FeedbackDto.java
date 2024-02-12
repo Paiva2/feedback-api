@@ -14,15 +14,18 @@ public class FeedbackDto {
 
     private final FeedbackStatus status;
 
+    private final int upVotes;
+
     private final CategoryDto category;
 
     public FeedbackDto(UUID id, String title, String details, FeedbackStatus status,
-            CategoryDto category) {
+            CategoryDto category, int upVotes) {
         this.id = id;
         this.title = title;
         this.details = details;
         this.status = status;
         this.category = category;
+        this.upVotes = upVotes;
     }
 
     public UUID getId() {
@@ -43,5 +46,9 @@ public class FeedbackDto {
 
     public CategoryDto getCategory() {
         return category;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
     }
 }

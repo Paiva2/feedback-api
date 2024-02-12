@@ -1,19 +1,11 @@
 package com.app.productfeedback.services.user;
 
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.enums.UserRole;
-import com.app.productfeedback.exceptions.BadRequestException;
-import com.app.productfeedback.exceptions.ConflictException;
-import com.app.productfeedback.exceptions.ForbiddenException;
-import com.app.productfeedback.exceptions.NotFoundException;
+import com.app.productfeedback.exceptions.*;
 import com.app.productfeedback.interfaces.UserRepository;
 
 import org.springframework.beans.BeanWrapper;

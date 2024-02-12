@@ -1,7 +1,6 @@
 package com.app.productfeedback.services.category;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +10,7 @@ import org.springframework.stereotype.Service;
 import com.app.productfeedback.entities.Category;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.enums.UserRole;
-import com.app.productfeedback.exceptions.BadRequestException;
-import com.app.productfeedback.exceptions.ConflictException;
-import com.app.productfeedback.exceptions.NotFoundException;
-import com.app.productfeedback.exceptions.UnauthorizedException;
+import com.app.productfeedback.exceptions.*;
 import com.app.productfeedback.interfaces.CategoryRepository;
 import com.app.productfeedback.interfaces.UserRepository;
 

@@ -73,4 +73,10 @@ public class FeedbackRepositoryTest implements FeedbackRepository {
         return new PageImpl<Feedback>(this.feedbacks.subList(fromIndex,
                 Math.min(fromIndex + pageable.getPageSize(), this.feedbacks.size())));
     }
+
+    @Override
+    public Optional<Feedback> findById(UUID feedbackId) {
+        return this.feedbacks.stream().filter(feedback -> feedback.getId().equals(feedbackId))
+                .findFirst();
+    }
 }
