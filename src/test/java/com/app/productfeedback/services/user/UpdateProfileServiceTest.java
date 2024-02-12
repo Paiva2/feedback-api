@@ -7,13 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-
+import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
 import com.app.productfeedback.interfaces.UserRepositoryInterface;
 import com.app.productfeedback.repositories.UserRepositoryTest;
-import com.app.productfeedback.services.user.UserService;
 
 @ActiveProfiles("test")
 public class UpdateProfileServiceTest {
@@ -33,19 +32,18 @@ public class UpdateProfileServiceTest {
     @DisplayName("should update user profile dinamically")
     public void caseOne() {
         User userCreation = this.userCreation();
-        User userToUpdate = new User();
+        UpdateProfileDto userToUpdate = new UpdateProfileDto();
 
-        userToUpdate.setId(userCreation.getId());
         userToUpdate.setUsername("Username change");
         userToUpdate.setProfilePictureUrl("fake profile pic url");
         userToUpdate.setEmail("updatedjohndoe@email.com");
 
-        User updatedUser = this.userService.updateProfile(userToUpdate);
+        User updatedUser = this.userService.updateProfile(userToUpdate, userCreation.getId());
 
         Assertions.assertEquals(updatedUser.getUsername(), "Username change");
         Assertions.assertEquals(updatedUser.getProfilePictureUrl(), "fake profile pic url");
         Assertions.assertEquals(updatedUser.getEmail(), "updatedjohndoe@email.com");
-        Assertions.assertEquals(userCreation.getId(), userToUpdate.getId());
+        Assertions.assertEquals(userCreation.getId(), updatedUser.getId());
         Assertions.assertNotNull(updatedUser);
     }
 
@@ -54,12 +52,11 @@ public class UpdateProfileServiceTest {
     @DisplayName("should update password and hash the new one")
     public void caseTwo() {
         User userCreation = this.userCreation();
-        User userToUpdate = new User();
+        UpdateProfileDto userToUpdate = new UpdateProfileDto();
 
-        userToUpdate.setId(userCreation.getId());
         userToUpdate.setPassword("newpass");
 
-        User updatedUser = this.userService.updateProfile(userToUpdate);
+        User updatedUser = this.userService.updateProfile(userToUpdate, userCreation.getId());
 
         boolean newPasswordMatches = bcrypt.matches("newpass", updatedUser.getPassword());
 
@@ -71,13 +68,12 @@ public class UpdateProfileServiceTest {
     @DisplayName("should not update password and hash the new one if new password has less than 6 characters")
     public void caseThree() {
         User userCreation = this.userCreation();
-        User userToUpdate = new User();
+        UpdateProfileDto userToUpdate = new UpdateProfileDto();
 
-        userToUpdate.setId(userCreation.getId());
         userToUpdate.setPassword("12345");
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.updateProfile(userToUpdate);
+            this.userService.updateProfile(userToUpdate, userCreation.getId());
         });
 
         Assertions.assertEquals("Password must have at least 6 characters.", thrown.getMessage());
@@ -98,10 +94,12 @@ public class UpdateProfileServiceTest {
 
         this.userService.register(existentEmail);
 
-        user.setEmail("existentuser@test.com");
+        UpdateProfileDto userToUpdate = new UpdateProfileDto();
+
+        userToUpdate.setEmail("existentuser@test.com");
 
         Exception thrown = Assertions.assertThrows(ConflictException.class, () -> {
-            this.userService.updateProfile(user);
+            this.userService.updateProfile(userToUpdate, user.getId());
         });
 
         Assertions.assertEquals("E-mail already exists.", thrown.getMessage());
@@ -111,11 +109,11 @@ public class UpdateProfileServiceTest {
     @DisplayName("should not update an user if necessary parameters are not provided correctly")
     public void caseFive() {
         Exception missingFirstArg = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.updateProfile(null);
+            this.userService.updateProfile(null, null);
         });
 
         Exception missingSecondArg = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.updateProfile(new User());
+            this.userService.updateProfile(new UpdateProfileDto(), null);
         });
 
 

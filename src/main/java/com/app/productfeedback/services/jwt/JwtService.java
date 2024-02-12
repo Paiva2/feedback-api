@@ -29,7 +29,7 @@ public class JwtService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
 
-            token = JWT.create().withIssuer(issuer).withSubject(subjectId)
+            token = JWT.create().withIssuer(this.issuer).withSubject(subjectId)
                     .withExpiresAt(this.tokenValidationTime()).sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new BadRequestException(exception.getMessage());
@@ -39,19 +39,19 @@ public class JwtService {
     }
 
     public String verify(String token) {
-        DecodedJWT decodedJWT;
+        String decodedJWT;
 
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
 
-            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build();
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(this.issuer).build();
 
-            decodedJWT = verifier.verify(token);
+            decodedJWT = verifier.verify(token.trim()).getSubject();
         } catch (JWTVerificationException exception) {
             throw new BadRequestException(exception.getMessage());
         }
 
-        return decodedJWT.getSubject();
+        return decodedJWT;
     }
 
     protected Instant tokenValidationTime() {

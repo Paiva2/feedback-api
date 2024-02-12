@@ -1,20 +1,26 @@
 package com.app.productfeedback.services.user;
 
-import java.beans.PropertyDescriptor;
+
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
+import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
+import com.app.productfeedback.enums.UserRole;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
 import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.UserRepositoryInterface;
+
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import java.beans.PropertyDescriptor;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,11 +54,13 @@ public class UserService {
 
         String password_hash = bcrypt.encode(user.getPassword());
 
+
         user.setPassword(password_hash);
+        user.setRole(UserRole.USER);
 
-        User newUser = this.userRepository.save(user);
+        User userCreated = this.userRepository.save(user);
 
-        return newUser;
+        return userCreated;
     }
 
     public User forgotPassword(User user) {
@@ -121,16 +129,16 @@ public class UserService {
         return getUser;
     }
 
-    public User updateProfile(User userUpdated) {
+    public User updateProfile(UpdateProfileDto userUpdated, UUID userId) {
         if (userUpdated == null) {
             throw new BadRequestException("User can't be null.");
         }
 
-        if (userUpdated.getId() == null) {
+        if (userId == null) {
             throw new BadRequestException("User id can't be null.");
         }
 
-        Optional<User> doesUserExists = this.userRepository.findById(userUpdated.getId());
+        Optional<User> doesUserExists = this.userRepository.findById(userId);
 
         if (doesUserExists.isEmpty()) {
             throw new NotFoundException("User not found.");
@@ -160,19 +168,16 @@ public class UserService {
         BeanWrapper updatedCopy = new BeanWrapperImpl(userUpdated);
         BeanWrapper sourceCopy = new BeanWrapperImpl(getUser);
 
-        PropertyDescriptor[] fieldsToUpdate = updatedCopy.getPropertyDescriptors();
+        List<PropertyDescriptor> fieldsToUpdate = List.of(updatedCopy.getPropertyDescriptors());
 
-        for (PropertyDescriptor field : fieldsToUpdate) {
+        fieldsToUpdate.forEach(field -> {
             String fieldName = field.getName();
             Object fieldValue = updatedCopy.getPropertyValue(fieldName);
 
-            boolean canUpdate = fieldValue != null && fieldName.hashCode() != "id".hashCode()
-                    && fieldName.hashCode() != "class".hashCode();
-
-            if (canUpdate) {
+            if (fieldValue != null & !fieldName.equals("class")) {
                 sourceCopy.setPropertyValue(fieldName, fieldValue);
             }
-        }
+        });
 
         User performUpdate = this.userRepository.save(getUser);
 

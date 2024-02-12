@@ -1,6 +1,7 @@
-package com.app.productfeedback.dto.user;
+package com.app.productfeedback.dto.request.user;
 
 import com.app.productfeedback.entities.User;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

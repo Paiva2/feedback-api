@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -37,6 +35,7 @@ public class RequestFilterConfig extends OncePerRequestFilter {
         String getToken = this.retrieveHeaderToken(request);
 
         if (getToken != null) {
+
             String retrieveToken = this.jwtService.verify(getToken);
 
             UUID userId = UUID.fromString(retrieveToken);
@@ -47,7 +46,8 @@ public class RequestFilterConfig extends OncePerRequestFilter {
                 throw new NotFoundException("Token error - User not found.");
             }
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, retrieveToken, null);
+            var authentication = new UsernamePasswordAuthenticationToken(user, retrieveToken,
+                    user.get().getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -56,12 +56,12 @@ public class RequestFilterConfig extends OncePerRequestFilter {
     }
 
     public String retrieveHeaderToken(HttpServletRequest request) {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null) {
             return null;
         }
 
-        return authHeader.replaceAll("Bearer", "");
+        return authHeader.replaceAll("Bearer ", "");
     }
 }

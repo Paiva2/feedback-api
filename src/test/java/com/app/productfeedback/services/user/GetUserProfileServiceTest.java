@@ -13,7 +13,6 @@ import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.repositories.UserRepositoryTest;
-import com.app.productfeedback.services.user.UserService;
 
 @ActiveProfiles("test")
 public class GetUserProfileServiceTest {

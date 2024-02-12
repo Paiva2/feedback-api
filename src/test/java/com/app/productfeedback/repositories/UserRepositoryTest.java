@@ -4,9 +4,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
+import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.interfaces.UserRepositoryInterface;
 
@@ -32,7 +34,10 @@ public class UserRepositoryTest implements UserRepositoryInterface {
 
             this.users.add(user);
         } else {
-            BeanUtils.copyProperties(user, doesUserExists);
+            UpdateProfileDto updatedUser = new UpdateProfileDto();
+
+            BeanUtils.copyProperties(user, updatedUser);
+            BeanUtils.copyProperties(updatedUser, doesUserExists);
         }
 
         return user;

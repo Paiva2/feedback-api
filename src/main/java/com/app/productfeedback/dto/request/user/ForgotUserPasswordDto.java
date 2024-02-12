@@ -1,4 +1,4 @@
-package com.app.productfeedback.dto.user;
+package com.app.productfeedback.dto.request.user;
 
 import com.app.productfeedback.entities.User;
 

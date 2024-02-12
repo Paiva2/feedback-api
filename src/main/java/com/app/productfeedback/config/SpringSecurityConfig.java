@@ -21,12 +21,15 @@ public class SpringSecurityConfig {
         String[] authNeededGets = {"/api/v1/user/profile"};
         String[] authNeededPatchs = {"/api/v1/user/update"};
 
+        String[] adminNeededPosts = {"/api/v1/category/**", "/api/v1/category"};
+
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, authNeededGets).authenticated();
-                    authorize.requestMatchers(HttpMethod.PATCH, authNeededPatchs).authenticated()
+                    authorize.requestMatchers(HttpMethod.PATCH, authNeededPatchs).authenticated();
+                    authorize.requestMatchers(HttpMethod.POST, adminNeededPosts).hasRole("ADMIN")
                             .anyRequest().permitAll();
                 }).addFilterBefore(requestFilterConfig, UsernamePasswordAuthenticationFilter.class)
                 .build();

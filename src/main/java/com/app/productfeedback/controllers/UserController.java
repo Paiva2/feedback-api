@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.productfeedback.dto.user.AuthUserDto;
-import com.app.productfeedback.dto.user.ForgotUserPasswordDto;
-import com.app.productfeedback.dto.user.RegisterNewUserDto;
-import com.app.productfeedback.dto.user.UpdateProfileDto;
+import com.app.productfeedback.dto.request.user.AuthUserDto;
+import com.app.productfeedback.dto.request.user.ForgotUserPasswordDto;
+import com.app.productfeedback.dto.request.user.RegisterNewUserDto;
+import com.app.productfeedback.dto.request.user.UpdateProfileDto;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.services.jwt.JwtService;
 import com.app.productfeedback.services.user.UserService;
@@ -80,7 +80,7 @@ public class UserController {
             @RequestBody @Valid UpdateProfileDto updateProfileDto) {
         String parseToken = this.jwtService.verify(authorizationHeader.replaceAll("Bearer", ""));
 
-        this.userService.updateProfile(updateProfileDto.toEntity(UUID.fromString(parseToken)));
+        this.userService.updateProfile(updateProfileDto, UUID.fromString(parseToken));
 
         return ResponseEntity.status(201)
                 .body(Collections.singletonMap("message", "Profile updated!"));

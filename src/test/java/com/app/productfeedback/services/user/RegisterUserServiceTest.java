@@ -11,7 +11,6 @@ import com.app.productfeedback.entities.User;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.ConflictException;
 import com.app.productfeedback.repositories.UserRepositoryTest;
-import com.app.productfeedback.services.user.UserService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions;

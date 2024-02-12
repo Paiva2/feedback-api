@@ -1,0 +1,1 @@
+ALTER TABLE tb_users ADD COLUMN role userRole NOT NULL DEFAULT 'USER';

@@ -11,7 +11,6 @@ import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.interfaces.UserRepositoryInterface;
 import com.app.productfeedback.repositories.UserRepositoryTest;
-import com.app.productfeedback.services.user.UserService;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
