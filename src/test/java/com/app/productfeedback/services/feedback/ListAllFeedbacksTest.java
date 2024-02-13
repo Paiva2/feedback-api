@@ -127,7 +127,7 @@ public class ListAllFeedbacksTest {
         for (int i = 1; i <= 20; i++) {
             Feedback newFeedback = new Feedback();
 
-            newFeedback.setFkCategoryId(category.getId());
+            newFeedback.setFkCategory(category.getId());
             newFeedback.setDetails("Feedback Detail n " + i);
             newFeedback.setTitle("Feedback n " + i);
 

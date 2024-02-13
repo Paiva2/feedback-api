@@ -62,7 +62,7 @@ public class FeedbackService {
             throw new NotFoundException("Category not found.");
         }
 
-        newFeedback.setFkCategoryId(doesCategoryExists.get().getId());
+        newFeedback.setFkCategory(doesCategoryExists.get().getId());
         newFeedback.setTitle(dto.getTitle());
         newFeedback.setDetails(dto.getDetails());
 
@@ -167,5 +167,37 @@ public class FeedbackService {
         }
 
         return this.feedbackRepository.save(getFeedback);
+    }
+
+    public void delete(UUID userId, UUID feedbackId) {
+        if (userId == null) {
+            throw new BadRequestException("Invalid user id.");
+        }
+
+        if (feedbackId == null) {
+            throw new BadRequestException("Invalid feedback id.");
+        }
+
+        Optional<User> doesUserExists = this.userRepository.findById(userId);
+
+        if (doesUserExists.isEmpty()) {
+            throw new NotFoundException("User not found.");
+        }
+
+        Optional<Feedback> doesFeedbackExists = this.feedbackRepository.findById(feedbackId);
+
+        if (doesFeedbackExists.isEmpty()) {
+            throw new NotFoundException("Feedback not found.");
+        }
+
+        Feedback getFeedback = doesFeedbackExists.get();
+
+        User getUser = doesUserExists.get();
+
+        if (getFeedback.getUser().getId() != getUser.getId()) {
+            throw new ForbiddenException("Invalid permissions.");
+        }
+
+        this.feedbackRepository.deleteById(getFeedback.getId());
     }
 }

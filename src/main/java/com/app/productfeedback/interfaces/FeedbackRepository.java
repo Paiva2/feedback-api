@@ -15,4 +15,6 @@ public interface FeedbackRepository {
     Page<Feedback> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     Optional<Feedback> findById(UUID feedbackId);
+
+    void deleteById(UUID feedbackId);
 }

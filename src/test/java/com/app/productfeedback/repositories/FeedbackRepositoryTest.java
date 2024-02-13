@@ -31,8 +31,9 @@ public class FeedbackRepositoryTest implements FeedbackRepository {
             feedback.setTitle(dto.getTitle());
             feedback.setDetails(dto.getDetails());
             feedback.setFkUserId(dto.getFkUserId());
-            feedback.setFkCategoryId(dto.getFkCategoryId());
+            feedback.setFkCategory(dto.getFkCategoryId());
             feedback.setStatus(dto.getStatus());
+            feedback.setUser(dto.getUser());
 
             this.feedbacks.add(feedback);
         } else {
@@ -78,5 +79,11 @@ public class FeedbackRepositoryTest implements FeedbackRepository {
     public Optional<Feedback> findById(UUID feedbackId) {
         return this.feedbacks.stream().filter(feedback -> feedback.getId().equals(feedbackId))
                 .findFirst();
+    }
+
+    @Override
+    public void deleteById(UUID feedbackId) {
+        this.feedbacks = this.feedbacks.stream()
+                .filter(feedback -> !feedback.getId().equals(feedbackId)).toList();
     }
 }

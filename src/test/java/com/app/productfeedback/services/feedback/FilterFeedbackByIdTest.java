@@ -74,7 +74,7 @@ public class FilterFeedbackByIdTest {
         Feedback newFeedback = new Feedback();
         newFeedback.setTitle("Feedback Test Title");
         newFeedback.setDetails("Feedback Test");
-        newFeedback.setFkCategoryId(categoryCreation.getId());
+        newFeedback.setFkCategory(categoryCreation.getId());
 
         return this.feedbackRepositoryTest.save(newFeedback);
     }

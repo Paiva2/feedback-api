@@ -85,11 +85,23 @@ public class FeedbackController {
                 return ResponseEntity.ok().body(this.feedbackResponseDto(getFeedback));
         }
 
+        @DeleteMapping("/{feedbackId}")
+        public ResponseEntity<Map<String, String>> deleteFeedback(
+                        @PathVariable(name = "feedbackId") UUID feedbackId,
+                        @RequestHeader(name = "Authorization", required = true) String authToken) {
+                String parseToken = this.jwtService.verify(authToken.replaceAll("Bearer ", ""));
+
+                this.feedbackService.delete(UUID.fromString(parseToken), feedbackId);
+
+                return ResponseEntity.ok()
+                                .body(Collections.singletonMap("message", "Deleted successfully."));
+        }
+
         protected FeedbackResponseDto feedbackResponseDto(Feedback feedback) {
-                User userFeedback = feedback.getUserId();
+                User userFeedback = feedback.getUser();
                 Category feedbackCategory = feedback.getCategory();
 
-                UserDto userDto = new UserDto(feedback.getUserId().getId(), userFeedback.getEmail(),
+                UserDto userDto = new UserDto(feedback.getUser().getId(), userFeedback.getEmail(),
                                 userFeedback.getUsername(), userFeedback.getProfilePictureUrl());
 
                 CategoryDto categoryDto = new CategoryDto(feedbackCategory.getId(),

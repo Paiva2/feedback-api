@@ -109,11 +109,11 @@ public class Feedback {
         return fkCategoryId;
     }
 
-    public void setFkCategoryId(UUID fkCategoryId) {
+    public void setFkCategory(UUID fkCategoryId) {
         this.fkCategoryId = fkCategoryId;
     }
 
-    public User getUserId() {
+    public User getUser() {
         return user;
     }
 

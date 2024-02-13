@@ -34,7 +34,7 @@ public class ListAllFeedbacksDto {
         return totalElements;
     }
 
-    public List<FeedbackDto> getCategories() {
+    public List<FeedbackDto> getFeedbacks() {
         return feedbacks;
     }
 

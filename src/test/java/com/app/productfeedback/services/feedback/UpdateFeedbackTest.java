@@ -206,7 +206,7 @@ public class UpdateFeedbackTest {
         newFeedback.setTitle("Feedback 1");
         newFeedback.setDetails("Feedback 1 details");
         newFeedback.setFkUserId(userId);
-        newFeedback.setFkCategoryId(categoryId);
+        newFeedback.setFkCategory(categoryId);
 
         return this.feedbackRepositoryTest.save(newFeedback);
     }
