@@ -42,9 +42,8 @@ public class Comment {
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
     private User user;
 
-    /*
-     * @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment") private List<Answer> answer;
-     */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
+    private List<Answer> answers;
 
     public UUID getId() {
         return id;
@@ -110,9 +109,11 @@ public class Comment {
         this.user = user;
     }
 
-    /*
-     * public List<Answer> getAnswer() { return answer; }
-     * 
-     * public void setAnswer(List<Answer> answer) { this.answer = answer; }
-     */
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answer) {
+        this.answers = answer;
+    }
 }

@@ -2,24 +2,34 @@ package com.app.productfeedback.dto.response.comment;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.List;
+
+import com.app.productfeedback.dto.response.answer.AnswerDto;
+import com.app.productfeedback.dto.response.user.UserDto;
+import com.app.productfeedback.entities.Answer;
+import com.app.productfeedback.entities.User;
 
 public class CommentDto {
     private UUID id;
 
     private String comment;
 
-    private UUID userId;
+    private UserDto user;
 
     private UUID feedbackId;
 
     private Date createdAt;
 
-    public CommentDto(UUID id, String comment, UUID userId, UUID feedbackId, Date createdAt) {
+    private List<AnswerDto> answers;
+
+    public CommentDto(UUID id, String comment, UserDto user, UUID feedbackId, Date createdAt,
+            List<Answer> answers) {
         this.id = id;
         this.comment = comment;
-        this.userId = userId;
+        this.user = user;
         this.feedbackId = feedbackId;
         this.createdAt = createdAt;
+        this.answers = this.formatAnswers(answers);
     }
 
     public UUID getId() {
@@ -30,8 +40,8 @@ public class CommentDto {
         return comment;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public UserDto getUser() {
+        return user;
     }
 
     public UUID getFeedbackId() {
@@ -40,5 +50,26 @@ public class CommentDto {
 
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public List<AnswerDto> getAnswers() {
+        return answers;
+    }
+
+    public List<AnswerDto> formatAnswers(List<Answer> answers) {
+        return answers.stream().map(answer -> {
+            User answerUser = answer.getUser();
+            User answeringToUser = answer.getAnsweringTo();
+
+            UserDto userDto = new UserDto(answerUser.getId(), answerUser.getEmail(),
+                    answerUser.getUsername(), answerUser.getProfilePictureUrl());
+
+            UserDto answeringToDto =
+                    new UserDto(answeringToUser.getId(), answeringToUser.getEmail(),
+                            answeringToUser.getUsername(), answeringToUser.getProfilePictureUrl());
+
+            return new AnswerDto(answer.getId(), answer.getAnswer(), answer.getCreatedAt(), userDto,
+                    answeringToDto);
+        }).toList();
     }
 }

@@ -36,11 +36,11 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(name = "fk_user_id", updatable = false, insertable = false)
-    public Comment user;
+    public User user;
 
     @ManyToOne
     @JoinColumn(name = "fk_answering_to", updatable = false, insertable = false)
-    public Comment answeringTo;
+    public User answeringTo;
 
     @ManyToOne
     @JoinColumn(name = "fk_comment_id", updatable = false, insertable = false)
@@ -102,19 +102,19 @@ public class Answer {
         this.commentId = commentId;
     }
 
-    public Comment getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Comment user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public Comment getAnsweringTo() {
+    public User getAnsweringTo() {
         return answeringTo;
     }
 
-    public void setAnsweringTo(Comment answeringTo) {
+    public void setAnsweringTo(User answeringTo) {
         this.answeringTo = answeringTo;
     }
 

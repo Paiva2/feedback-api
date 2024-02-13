@@ -8,6 +8,7 @@ import com.app.productfeedback.dto.response.category.CategoryDto;
 import com.app.productfeedback.dto.response.comment.CommentDto;
 import com.app.productfeedback.dto.response.user.UserDto;
 import com.app.productfeedback.entities.Comment;
+import com.app.productfeedback.entities.User;
 import com.app.productfeedback.enums.FeedbackStatus;
 
 public class FeedbackResponseDto extends FeedbackDto {
@@ -35,8 +36,17 @@ public class FeedbackResponseDto extends FeedbackDto {
 
     public List<CommentDto> formatComments(List<Comment> comments) {
         return comments.stream().map(comment -> {
-            return new CommentDto(comment.getId(), comment.getComment(), comment.getUserId(),
-                    comment.getFeedbackId(), comment.getCreatedAt());
+            User commentUser = comment.getUser();
+
+            UserDto userDto = null;
+
+            if (commentUser != null) {
+                userDto = new UserDto(commentUser.getId(), commentUser.getEmail(),
+                        commentUser.getUsername(), commentUser.getProfilePictureUrl());
+            }
+
+            return new CommentDto(comment.getId(), comment.getComment(), userDto,
+                    comment.getFeedbackId(), comment.getCreatedAt(), comment.getAnswers());
         }).toList();
     }
 }
