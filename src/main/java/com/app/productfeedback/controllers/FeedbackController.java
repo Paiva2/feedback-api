@@ -117,6 +117,7 @@ public class FeedbackController {
 
                 return new FeedbackResponseDto(feedback.getId(), feedback.getTitle(),
                                 feedback.getDetails(), feedback.getStatus(), categoryDto, userDto,
-                                feedback.getUpVotes());
+                                feedback.getUpVotes(), feedback.getComments(),
+                                feedback.getCreatedAt());
         }
 }

@@ -1,5 +1,7 @@
 package com.app.productfeedback.interfaces;
 
-public interface CommentRepository {
+import com.app.productfeedback.entities.Comment;
 
+public interface CommentRepository {
+    Comment save(Comment feedback);
 }

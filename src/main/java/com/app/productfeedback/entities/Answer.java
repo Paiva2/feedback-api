@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.*;
 
-@Entity(name = "tb_answers")
+@Entity(name = "tb_answer")
 public class Answer {
     @Id
     @GeneratedValue(generator = "uuid2")

@@ -5,6 +5,8 @@ import java.util.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity(name = "tb_comments")
@@ -25,21 +27,24 @@ public class Comment {
     private Date updatedAt;
 
     @Column(name = "fk_user_id", nullable = false)
-    private String userId;
+    private UUID userId;
 
     @Column(name = "fk_feedback_id", nullable = false)
-    private String feedbackId;
+    private UUID feedbackId;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_feedback_id", insertable = false, updatable = false)
     private Feedback feedback;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
-    private Feedback user;
+    private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
-    private List<Answer> answer;
+    /*
+     * @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment") private List<Answer> answer;
+     */
 
     public UUID getId() {
         return id;
@@ -73,19 +78,19 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
-    public String getFeedbackId() {
+    public UUID getFeedbackId() {
         return feedbackId;
     }
 
-    public void setFeedbackId(String feedbackId) {
+    public void setFeedbackId(UUID feedbackId) {
         this.feedbackId = feedbackId;
     }
 
@@ -97,19 +102,17 @@ public class Comment {
         this.feedback = feedback;
     }
 
-    public Feedback getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Feedback user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public List<Answer> getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(List<Answer> answer) {
-        this.answer = answer;
-    }
+    /*
+     * public List<Answer> getAnswer() { return answer; }
+     * 
+     * public void setAnswer(List<Answer> answer) { this.answer = answer; }
+     */
 }

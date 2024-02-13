@@ -48,7 +48,7 @@ public class Feedback {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Comment> comments;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
