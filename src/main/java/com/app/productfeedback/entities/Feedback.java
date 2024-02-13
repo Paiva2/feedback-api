@@ -48,12 +48,12 @@ public class Feedback {
     @OneToOne
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User userId;
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "fk_category_id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Category categoryId;
+    private Category category;
 
     public Feedback() {}
 
@@ -114,19 +114,19 @@ public class Feedback {
     }
 
     public User getUserId() {
-        return userId;
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Category getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Category categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public FeedbackStatus getStatus() {

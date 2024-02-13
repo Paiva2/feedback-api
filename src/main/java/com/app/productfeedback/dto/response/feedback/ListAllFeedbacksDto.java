@@ -40,8 +40,8 @@ public class ListAllFeedbacksDto {
 
     public List<FeedbackDto> formatFeedbacklist(List<Feedback> feedbackList) {
         return feedbackList.stream().map(feedback -> {
-            CategoryDto categoryDto = new CategoryDto(feedback.getCategoryId().getId(),
-                    feedback.getCategoryId().getName());
+            CategoryDto categoryDto = new CategoryDto(feedback.getCategory().getId(),
+                    feedback.getCategory().getName());
 
             return new FeedbackDto(feedback.getId(), feedback.getTitle(), feedback.getDetails(),
                     feedback.getStatus(), categoryDto, feedback.getUpVotes());

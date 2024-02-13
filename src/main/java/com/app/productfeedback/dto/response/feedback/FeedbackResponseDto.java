@@ -6,10 +6,10 @@ import com.app.productfeedback.dto.response.category.CategoryDto;
 import com.app.productfeedback.dto.response.user.UserDto;
 import com.app.productfeedback.enums.FeedbackStatus;
 
-public class FilterFeedbackDto extends FeedbackDto {
+public class FeedbackResponseDto extends FeedbackDto {
     private UserDto feedbackOwner;
 
-    public FilterFeedbackDto(UUID id, String title, String details, FeedbackStatus status,
+    public FeedbackResponseDto(UUID id, String title, String details, FeedbackStatus status,
             CategoryDto category, UserDto feedbackOwner, int upVotes) {
         super(id, title, details, status, category, upVotes);
 

@@ -40,7 +40,7 @@ public class FeedbackRepositoryTest implements FeedbackRepository {
 
             int existentFeedbackIdx = this.feedbacks.indexOf(doesFeedbackExists.get());
 
-            this.feedbacks.set(existentFeedbackIdx, doesFeedbackExists.get());
+            feedback = this.feedbacks.set(existentFeedbackIdx, doesFeedbackExists.get());
         }
 
         return feedback;

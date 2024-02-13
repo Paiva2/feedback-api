@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.app.productfeedback.dto.request.feedback.NewFeedbackDto;
+import com.app.productfeedback.dto.request.feedback.UpdateFeedbackDto;
 import com.app.productfeedback.dto.response.category.CategoryDto;
-import com.app.productfeedback.dto.response.feedback.FilterFeedbackDto;
+import com.app.productfeedback.dto.response.feedback.FeedbackResponseDto;
 import com.app.productfeedback.dto.response.feedback.ListAllFeedbacksDto;
 import com.app.productfeedback.dto.response.user.UserDto;
 import com.app.productfeedback.entities.Category;
@@ -64,17 +65,29 @@ public class FeedbackController {
                                 totalElements, feedbackPaginable.getContent()));
         }
 
+        @PatchMapping("/update")
+        public ResponseEntity<FeedbackResponseDto> updateFeedback(
+                        @RequestBody @Valid UpdateFeedbackDto updateFeedbackDto,
+                        @RequestHeader(name = "Authorization", required = true) String jwtToken) {
+                String parseToken = this.jwtService.verify(jwtToken.replaceAll("Bearer ", ""));
+
+                Feedback feedback = this.feedbackService.update(UUID.fromString(parseToken),
+                                updateFeedbackDto);
+
+                return ResponseEntity.status(201).body(this.feedbackResponseDto(feedback));
+        }
+
         @GetMapping("/{feedbackId}")
-        public ResponseEntity<FilterFeedbackDto> filterFeedback(
+        public ResponseEntity<FeedbackResponseDto> filterFeedback(
                         @PathVariable(name = "feedbackId", required = false) UUID feedbackId) {
                 Feedback getFeedback = this.feedbackService.getById(feedbackId);
 
-                return ResponseEntity.ok().body(this.filterFeedbackDtoMapper(getFeedback));
+                return ResponseEntity.ok().body(this.feedbackResponseDto(getFeedback));
         }
 
-        protected FilterFeedbackDto filterFeedbackDtoMapper(Feedback feedback) {
+        protected FeedbackResponseDto feedbackResponseDto(Feedback feedback) {
                 User userFeedback = feedback.getUserId();
-                Category feedbackCategory = feedback.getCategoryId();
+                Category feedbackCategory = feedback.getCategory();
 
                 UserDto userDto = new UserDto(feedback.getUserId().getId(), userFeedback.getEmail(),
                                 userFeedback.getUsername(), userFeedback.getProfilePictureUrl());
@@ -82,7 +95,7 @@ public class FeedbackController {
                 CategoryDto categoryDto = new CategoryDto(feedbackCategory.getId(),
                                 feedbackCategory.getName());
 
-                return new FilterFeedbackDto(feedback.getId(), feedback.getTitle(),
+                return new FeedbackResponseDto(feedback.getId(), feedback.getTitle(),
                                 feedback.getDetails(), feedback.getStatus(), categoryDto, userDto,
                                 feedback.getUpVotes());
         }
