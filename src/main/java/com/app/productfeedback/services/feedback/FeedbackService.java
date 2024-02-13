@@ -200,4 +200,20 @@ public class FeedbackService {
 
         this.feedbackRepository.deleteById(getFeedback.getId());
     }
+
+    public Feedback insertUpVotes(UUID feedbackId) {
+        if (feedbackId == null) {
+            throw new BadRequestException("Invalid feedback id.");
+        }
+
+        Optional<Feedback> doesFeedbackExists = this.feedbackRepository.findById(feedbackId);
+
+        if (doesFeedbackExists.isEmpty()) {
+            throw new NotFoundException("Feedback not found.");
+        }
+
+        doesFeedbackExists.get().insertUpVote();
+
+        return this.feedbackRepository.save(doesFeedbackExists.get());
+    }
 }

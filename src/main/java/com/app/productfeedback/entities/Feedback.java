@@ -9,8 +9,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.app.productfeedback.enums.FeedbackStatus;
-
-import jakarta.persistence.EnumType;
 import jakarta.persistence.*;
 
 @Entity(name = "tb_feedbacks")
@@ -143,5 +141,9 @@ public class Feedback {
 
     public void setUpVotes(int upVotes) {
         this.upVotes = upVotes;
+    }
+
+    public void insertUpVote() {
+        this.upVotes = this.upVotes + 1;
     }
 }

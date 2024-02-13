@@ -97,6 +97,14 @@ public class FeedbackController {
                                 .body(Collections.singletonMap("message", "Deleted successfully."));
         }
 
+        @PatchMapping("/upvote/{feedbackId}")
+        public ResponseEntity<FeedbackResponseDto> addUpvote(
+                        @PathVariable(name = "feedbackId", required = false) UUID feedbackId) {
+                Feedback upvotedFeedback = this.feedbackService.insertUpVotes(feedbackId);
+
+                return ResponseEntity.status(201).body(this.feedbackResponseDto(upvotedFeedback));
+        }
+
         protected FeedbackResponseDto feedbackResponseDto(Feedback feedback) {
                 User userFeedback = feedback.getUser();
                 Category feedbackCategory = feedback.getCategory();
