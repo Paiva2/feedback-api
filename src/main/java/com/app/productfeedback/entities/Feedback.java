@@ -2,6 +2,7 @@ package com.app.productfeedback.entities;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
@@ -42,6 +43,10 @@ public class Feedback {
 
     @Enumerated(EnumType.STRING)
     private FeedbackStatus status = FeedbackStatus.SUGGESTION;
+
+    @OneToMany(mappedBy = "feedback")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Comment> comments;
 
     @OneToOne
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
@@ -145,5 +150,17 @@ public class Feedback {
 
     public void insertUpVote() {
         this.upVotes = this.upVotes + 1;
+    }
+
+    public void setFkCategoryId(UUID fkCategoryId) {
+        this.fkCategoryId = fkCategoryId;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
