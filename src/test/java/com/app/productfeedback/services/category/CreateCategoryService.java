@@ -25,14 +25,14 @@ public class CreateCategoryService {
 
     private UserRepositoryTest userRepositoryTest;
 
-    private CategoryService categoryService;
+    private CategoryService sut;
 
     @BeforeEach
     public void setup() {
         this.categoryRepositoryTest = new CategoryRepositoryTest();
         this.userRepositoryTest = new UserRepositoryTest();
 
-        this.categoryService = new CategoryService(categoryRepositoryTest, userRepositoryTest);
+        this.sut = new CategoryService(categoryRepositoryTest, userRepositoryTest);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class CreateCategoryService {
 
         categoryDto.setName("Feature");
 
-        Category categoryCreated = this.categoryService.create(categoryDto, user.getId());
+        Category categoryCreated = this.sut.create(categoryDto, user.getId());
 
         Assertions.assertNotNull(categoryCreated);
         Assertions.assertNotNull(categoryCreated.getId());
@@ -57,18 +57,18 @@ public class CreateCategoryService {
         Category categoryDto = new Category();
 
         Exception thrownCategoryNull = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.categoryService.create(null, user.getId());
+            this.sut.create(null, user.getId());
         });
 
         Exception thrownUserIdNull = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.categoryService.create(categoryDto, null);
+            this.sut.create(categoryDto, null);
         });
 
         Exception thrownCategoryNameBlank =
                 Assertions.assertThrows(BadRequestException.class, () -> {
                     categoryDto.setName(null);
 
-                    this.categoryService.create(categoryDto, user.getId());
+                    this.sut.create(categoryDto, user.getId());
                 });
 
         Assertions.assertEquals(thrownCategoryNull.getMessage(), "Category can't be null.");
@@ -84,7 +84,7 @@ public class CreateCategoryService {
         categoryDto.setName("Feature");
 
         Exception thrownEx = Assertions.assertThrows(NotFoundException.class, () -> {
-            this.categoryService.create(categoryDto, UUID.randomUUID());
+            this.sut.create(categoryDto, UUID.randomUUID());
         });
 
         Assertions.assertEquals(thrownEx.getMessage(), "User not found.");
@@ -101,7 +101,7 @@ public class CreateCategoryService {
         Exception thrownEx = Assertions.assertThrows(UnauthorizedException.class, () -> {
             user.setRole(UserRole.USER);
 
-            this.categoryService.create(categoryDto, user.getId());
+            this.sut.create(categoryDto, user.getId());
         });
 
         Assertions.assertEquals(thrownEx.getMessage(), "Only admins can create categories.");
@@ -115,10 +115,10 @@ public class CreateCategoryService {
         Category categoryDto = new Category();
 
         categoryDto.setName("Feature");
-        this.categoryService.create(categoryDto, user.getId());
+        this.sut.create(categoryDto, user.getId());
 
         Exception thrownEx = Assertions.assertThrows(ConflictException.class, () -> {
-            this.categoryService.create(categoryDto, user.getId());
+            this.sut.create(categoryDto, user.getId());
         });
 
         Assertions.assertEquals(thrownEx.getMessage(), "Category already exists.");

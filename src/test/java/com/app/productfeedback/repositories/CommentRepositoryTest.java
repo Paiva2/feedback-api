@@ -35,4 +35,10 @@ public class CommentRepositoryTest implements CommentRepository {
         return handleComment;
     }
 
+    @Override
+    public Optional<Comment> findById(UUID commentId) {
+        return this.comments.stream().filter(comment -> comment.getId().equals(commentId))
+                .findFirst();
+    }
+
 }

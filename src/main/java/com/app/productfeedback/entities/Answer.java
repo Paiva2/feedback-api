@@ -26,13 +26,13 @@ public class Answer {
     private Date updatedAt;
 
     @Column(name = "fk_user_id", nullable = false)
-    private String userId;
+    private UUID userId;
 
     @Column(name = "fk_answering_to", nullable = false)
-    private String answeringToId;
+    private UUID answeringToId;
 
     @Column(name = "fk_comment_id", nullable = false)
-    private String commentId;
+    private UUID commentId;
 
     @ManyToOne
     @JoinColumn(name = "fk_user_id", updatable = false, insertable = false)
@@ -78,27 +78,27 @@ public class Answer {
         this.updatedAt = updatedAt;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
-    public String getAnsweringToId() {
+    public UUID getAnsweringToId() {
         return answeringToId;
     }
 
-    public void setAnsweringToId(String answeringToId) {
+    public void setAnsweringToId(UUID answeringToId) {
         this.answeringToId = answeringToId;
     }
 
-    public String getCommentId() {
+    public UUID getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(String commentId) {
+    public void setCommentId(UUID commentId) {
         this.commentId = commentId;
     }
 

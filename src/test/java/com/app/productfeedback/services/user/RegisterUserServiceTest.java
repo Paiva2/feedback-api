@@ -25,12 +25,12 @@ public class RegisterUserServiceTest {
     private UserRepositoryTest userRepositoryTest;
 
     @Autowired
-    private UserService userService;
+    private UserService sut;
 
     @BeforeEach
     void setup() {
         this.userRepositoryTest = new UserRepositoryTest();
-        this.userService = new UserService(userRepositoryTest);
+        this.sut = new UserService(userRepositoryTest);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class RegisterUserServiceTest {
         newUser.setSecretQuestion("Fav Band");
         newUser.setSecretAnswer("The Beatles");
 
-        User userCreated = this.userService.register(newUser);
+        User userCreated = this.sut.register(newUser);
 
         Boolean doesPasswordsMatches = BCrypt.checkpw("123456", userCreated.getPassword());
 
@@ -66,10 +66,10 @@ public class RegisterUserServiceTest {
         newUser.setSecretQuestion("Fav Band");
         newUser.setSecretAnswer("The Beatles");
 
-        this.userService.register(newUser);
+        this.sut.register(newUser);
 
         Exception thrown = Assertions.assertThrows(ConflictException.class, () -> {
-            this.userService.register(newUser);
+            this.sut.register(newUser);
         });
 
         Assertions.assertEquals("E-mail already exists.", thrown.getMessage());
@@ -87,7 +87,7 @@ public class RegisterUserServiceTest {
         newUser.setSecretAnswer("The Beatles");
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.register(newUser);
+            this.sut.register(newUser);
         });
 
         Assertions.assertEquals("Password must have at least 6 characters.", thrown.getMessage());
@@ -99,7 +99,7 @@ public class RegisterUserServiceTest {
         User newUser = null;
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.register(newUser);
+            this.sut.register(newUser);
         });
 
         Assertions.assertEquals("User can't be null.", thrown.getMessage());
@@ -117,7 +117,7 @@ public class RegisterUserServiceTest {
         newUser.setSecretQuestion("Fav Band");
 
         Exception thrownError = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.register(newUser);
+            this.sut.register(newUser);
         });
 
         Assertions.assertEquals("Secret question and answer must be provided.",

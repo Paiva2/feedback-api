@@ -16,14 +16,14 @@ import com.app.productfeedback.repositories.UserRepositoryTest;
 
 @ActiveProfiles("test")
 public class GetUserProfileServiceTest {
-    private UserService userService;
+    private UserService sut;
 
     private UserRepositoryTest userRepositoryTest;
 
     @BeforeEach
     public void setup() {
         this.userRepositoryTest = new UserRepositoryTest();
-        this.userService = new UserService(userRepositoryTest);
+        this.sut = new UserService(userRepositoryTest);
     }
 
     @Test
@@ -36,9 +36,9 @@ public class GetUserProfileServiceTest {
         userCreation.setSecretQuestion("Fav Band");
         userCreation.setSecretAnswer("The Beatles");
 
-        this.userService.register(userCreation);
+        this.sut.register(userCreation);
 
-        Map<String, Object> userProfile = this.userService.profile(userCreation.getId());
+        Map<String, Object> userProfile = this.sut.profile(userCreation.getId());
 
         Assertions.assertNotNull(userProfile);
         Assertions.assertEquals(userProfile.get("email"), "johndoe@test.com");
@@ -51,7 +51,7 @@ public class GetUserProfileServiceTest {
     public void caseTwo() {
 
         Exception thrownError = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.profile(null);
+            this.sut.profile(null);
         });
 
         Assertions.assertEquals("User can't be null.", thrownError.getMessage());
@@ -61,7 +61,7 @@ public class GetUserProfileServiceTest {
     @DisplayName("it should not get an user profile if user doesn't exists")
     public void caseThree() {
         Exception thrownError = Assertions.assertThrows(NotFoundException.class, () -> {
-            this.userService.profile(UUID.randomUUID());
+            this.sut.profile(UUID.randomUUID());
         });
 
         Assertions.assertEquals("User not found.", thrownError.getMessage());

@@ -18,14 +18,14 @@ import com.app.productfeedback.repositories.UserRepositoryTest;
 public class UpdateProfileServiceTest {
     private BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
-    private UserService userService;
+    private UserService sut;
 
     private UserRepository userRepository;
 
     @BeforeEach
     void setup() {
         this.userRepository = new UserRepositoryTest();
-        this.userService = new UserService(userRepository);
+        this.sut = new UserService(userRepository);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class UpdateProfileServiceTest {
         userToUpdate.setProfilePictureUrl("fake profile pic url");
         userToUpdate.setEmail("updatedjohndoe@email.com");
 
-        User updatedUser = this.userService.updateProfile(userToUpdate, userCreation.getId());
+        User updatedUser = this.sut.updateProfile(userToUpdate, userCreation.getId());
 
         Assertions.assertEquals(updatedUser.getUsername(), "Username change");
         Assertions.assertEquals(updatedUser.getProfilePictureUrl(), "fake profile pic url");
@@ -56,7 +56,7 @@ public class UpdateProfileServiceTest {
 
         userToUpdate.setPassword("newpass");
 
-        User updatedUser = this.userService.updateProfile(userToUpdate, userCreation.getId());
+        User updatedUser = this.sut.updateProfile(userToUpdate, userCreation.getId());
 
         boolean newPasswordMatches = bcrypt.matches("newpass", updatedUser.getPassword());
 
@@ -73,7 +73,7 @@ public class UpdateProfileServiceTest {
         userToUpdate.setPassword("12345");
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.updateProfile(userToUpdate, userCreation.getId());
+            this.sut.updateProfile(userToUpdate, userCreation.getId());
         });
 
         Assertions.assertEquals("Password must have at least 6 characters.", thrown.getMessage());
@@ -92,14 +92,14 @@ public class UpdateProfileServiceTest {
         existentEmail.setSecretQuestion("Fav Band");
         existentEmail.setSecretAnswer("The Beatles");
 
-        this.userService.register(existentEmail);
+        this.sut.register(existentEmail);
 
         UpdateProfileDto userToUpdate = new UpdateProfileDto();
 
         userToUpdate.setEmail("existentuser@test.com");
 
         Exception thrown = Assertions.assertThrows(ConflictException.class, () -> {
-            this.userService.updateProfile(userToUpdate, user.getId());
+            this.sut.updateProfile(userToUpdate, user.getId());
         });
 
         Assertions.assertEquals("E-mail already exists.", thrown.getMessage());
@@ -109,11 +109,11 @@ public class UpdateProfileServiceTest {
     @DisplayName("should not update an user if necessary parameters are not provided correctly")
     public void caseFive() {
         Exception missingFirstArg = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.updateProfile(null, null);
+            this.sut.updateProfile(null, null);
         });
 
         Exception missingSecondArg = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.updateProfile(new UpdateProfileDto(), null);
+            this.sut.updateProfile(new UpdateProfileDto(), null);
         });
 
 
@@ -130,7 +130,7 @@ public class UpdateProfileServiceTest {
         newUser.setSecretQuestion("Fav Band");
         newUser.setSecretAnswer("The Beatles");
 
-        User creation = this.userService.register(newUser);
+        User creation = this.sut.register(newUser);
 
         return creation;
     }

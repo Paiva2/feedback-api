@@ -16,14 +16,14 @@ import com.app.productfeedback.repositories.UserRepositoryTest;
 
 @ActiveProfiles("test")
 public class AuthUserServiceTest {
-    private UserService userService;
+    private UserService sut;
 
     private UserRepository userRepository;
 
     @BeforeEach
     void setup() {
         this.userRepository = new UserRepositoryTest();
-        this.userService = new UserService(userRepository);
+        this.sut = new UserService(userRepository);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class AuthUserServiceTest {
         userToAuth.setEmail("johndoe@test.com");
         userToAuth.setPassword("123456");
 
-        User userAuth = this.userService.auth(userToAuth);
+        User userAuth = this.sut.auth(userToAuth);
 
         Assertions.assertNotNull(userAuth);
         Assertions.assertEquals(userToAuth.getEmail(), "johndoe@test.com");
@@ -48,7 +48,7 @@ public class AuthUserServiceTest {
         User newUser = null;
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.auth(newUser);
+            this.sut.auth(newUser);
         });
 
         Assertions.assertEquals("User can't be null.", thrown.getMessage());
@@ -62,7 +62,7 @@ public class AuthUserServiceTest {
         nonRegisteredUser.setEmail("nonregistereduser@email.com");
 
         Exception thrown = Assertions.assertThrows(NotFoundException.class, () -> {
-            this.userService.auth(nonRegisteredUser);
+            this.sut.auth(nonRegisteredUser);
         });
 
         Assertions.assertEquals("User not found.", thrown.getMessage());
@@ -76,7 +76,7 @@ public class AuthUserServiceTest {
         user.setPassword("wrongpassword");
 
         Exception thrown = Assertions.assertThrows(ForbiddenException.class, () -> {
-            this.userService.auth(user);
+            this.sut.auth(user);
         });
 
         Assertions.assertEquals("Wrong credentials.", thrown.getMessage());
@@ -92,7 +92,7 @@ public class AuthUserServiceTest {
         newUser.setSecretQuestion("Fav Band");
         newUser.setSecretAnswer("The Beatles");
 
-        this.userService.register(newUser);
+        this.sut.register(newUser);
 
         return newUser;
     }

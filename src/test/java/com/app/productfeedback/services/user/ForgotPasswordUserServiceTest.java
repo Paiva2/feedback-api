@@ -20,14 +20,14 @@ import org.springframework.test.context.ActiveProfiles;
 public class ForgotPasswordUserServiceTest {
     protected BCrypt bcrypt = new BCrypt();
 
-    private UserService userService;
+    private UserService sut;
 
     private UserRepository userRepository;
 
     @BeforeEach
     void setup() {
         this.userRepository = new UserRepositoryTest();
-        this.userService = new UserService(userRepository);
+        this.sut = new UserService(userRepository);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class ForgotPasswordUserServiceTest {
 
         user.setPassword("changepassword");
 
-        User userPasswordUpdated = this.userService.forgotPassword(user);
+        User userPasswordUpdated = this.sut.forgotPassword(user);
 
         boolean DoesNewPasswordMatches =
                 BCrypt.checkpw("changepassword", userPasswordUpdated.getPassword());
@@ -53,7 +53,7 @@ public class ForgotPasswordUserServiceTest {
         User newUser = null;
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.forgotPassword(newUser);
+            this.sut.forgotPassword(newUser);
         });
 
         Assertions.assertEquals("User can't be null.", thrown.getMessage());
@@ -65,7 +65,7 @@ public class ForgotPasswordUserServiceTest {
         User nonExistentUser = new User();
 
         Exception thrown = Assertions.assertThrows(NotFoundException.class, () -> {
-            this.userService.forgotPassword(nonExistentUser);
+            this.sut.forgotPassword(nonExistentUser);
         });
 
         Assertions.assertEquals("User not found.", thrown.getMessage());
@@ -80,7 +80,7 @@ public class ForgotPasswordUserServiceTest {
         userToUpdate.setPassword("12345");
 
         Exception thrown = Assertions.assertThrows(BadRequestException.class, () -> {
-            this.userService.forgotPassword(userToUpdate);
+            this.sut.forgotPassword(userToUpdate);
         });
 
         Assertions.assertEquals("Password must have at least 6 characters.", thrown.getMessage());
@@ -97,7 +97,7 @@ public class ForgotPasswordUserServiceTest {
         userToUpdate.setSecretAnswer("Wrong Answer");
 
         Exception thrown = Assertions.assertThrows(ForbiddenException.class, () -> {
-            this.userService.forgotPassword(userToUpdate);
+            this.sut.forgotPassword(userToUpdate);
         });
 
         Assertions.assertEquals("Secret answer doesn't match.", thrown.getMessage());
@@ -114,7 +114,7 @@ public class ForgotPasswordUserServiceTest {
         userToUpdate.setSecretAnswer("The Beatles");
 
         Exception thrown = Assertions.assertThrows(ForbiddenException.class, () -> {
-            this.userService.forgotPassword(userToUpdate);
+            this.sut.forgotPassword(userToUpdate);
         });
 
         Assertions.assertEquals("Secret question doesn't match.", thrown.getMessage());
@@ -129,7 +129,7 @@ public class ForgotPasswordUserServiceTest {
         newUser.setSecretQuestion("Fav Band");
         newUser.setSecretAnswer("The Beatles");
 
-        User createdUser = this.userService.register(newUser);
+        User createdUser = this.sut.register(newUser);
 
         return createdUser;
     }

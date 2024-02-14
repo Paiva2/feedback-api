@@ -14,7 +14,7 @@ public class CommentDto {
 
     private String comment;
 
-    private UserDto user;
+    private UserDto commentOwner;
 
     private UUID feedbackId;
 
@@ -22,11 +22,11 @@ public class CommentDto {
 
     private List<AnswerDto> answers;
 
-    public CommentDto(UUID id, String comment, UserDto user, UUID feedbackId, Date createdAt,
-            List<Answer> answers) {
+    public CommentDto(UUID id, String comment, UserDto commentOwner, UUID feedbackId,
+            Date createdAt, List<Answer> answers) {
         this.id = id;
         this.comment = comment;
-        this.user = user;
+        this.commentOwner = commentOwner;
         this.feedbackId = feedbackId;
         this.createdAt = createdAt;
         this.answers = this.formatAnswers(answers);
@@ -38,10 +38,6 @@ public class CommentDto {
 
     public String getComment() {
         return comment;
-    }
-
-    public UserDto getUser() {
-        return user;
     }
 
     public UUID getFeedbackId() {
@@ -56,17 +52,28 @@ public class CommentDto {
         return answers;
     }
 
+    public UserDto getCommentOwner() {
+        return commentOwner;
+    }
+
     public List<AnswerDto> formatAnswers(List<Answer> answers) {
         return answers.stream().map(answer -> {
             User answerUser = answer.getUser();
             User answeringToUser = answer.getAnsweringTo();
 
-            UserDto userDto = new UserDto(answerUser.getId(), answerUser.getEmail(),
-                    answerUser.getUsername(), answerUser.getProfilePictureUrl());
+            UserDto userDto = null;
 
-            UserDto answeringToDto =
-                    new UserDto(answeringToUser.getId(), answeringToUser.getEmail(),
-                            answeringToUser.getUsername(), answeringToUser.getProfilePictureUrl());
+            UserDto answeringToDto = null;
+
+            if (answerUser != null) {
+                userDto = new UserDto(answerUser.getId(), answerUser.getEmail(),
+                        answerUser.getUsername(), answerUser.getProfilePictureUrl());
+            }
+
+            if (answeringToUser != null) {
+                answeringToDto = new UserDto(answeringToUser.getId(), answeringToUser.getEmail(),
+                        answeringToUser.getUsername(), answeringToUser.getProfilePictureUrl());
+            }
 
             return new AnswerDto(answer.getId(), answer.getAnswer(), answer.getCreatedAt(), userDto,
                     answeringToDto);

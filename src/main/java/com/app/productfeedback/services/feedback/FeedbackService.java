@@ -201,6 +201,7 @@ public class FeedbackService {
         this.feedbackRepository.deleteById(getFeedback.getId());
     }
 
+    // TODO: ONLY ONE UPVOTE FOR USER
     public Feedback insertUpVotes(UUID feedbackId) {
         if (feedbackId == null) {
             throw new BadRequestException("Invalid feedback id.");

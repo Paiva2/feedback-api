@@ -12,7 +12,7 @@ public class AnswerDto {
 
     private Date createdAt;
 
-    public UserDto user;
+    public UserDto answerOwner;
 
     public UserDto answeringTo;
 
@@ -20,7 +20,7 @@ public class AnswerDto {
         this.id = id;
         this.answer = answer;
         this.createdAt = createdAt;
-        this.user = user;
+        this.answerOwner = user;
         this.answeringTo = answeringTo;
     }
 
@@ -36,8 +36,8 @@ public class AnswerDto {
         return createdAt;
     }
 
-    public UserDto getUser() {
-        return user;
+    public UserDto getAnswerOwner() {
+        return answerOwner;
     }
 
     public UserDto getAnsweringTo() {
