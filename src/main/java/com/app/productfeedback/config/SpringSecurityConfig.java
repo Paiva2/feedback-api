@@ -19,8 +19,9 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         String[] authNeededGets = {"/api/v1/user/profile"};
-        String[] authNeededPatchs = {"/api/v1/user/update", "/api/v1/comment/*"};
-        String[] authNeededDeletes = {"/api/v1/comment/remove/**"};
+        String[] authNeededPatchs =
+                {"/api/v1/user/update", "/api/v1/comment/*", "/api/v1/answer/**"};
+        String[] authNeededDeletes = {"/api/v1/comment/remove/**", "/api/v1/answer/**"};
 
         String[] adminNeededPosts = {"/api/v1/category/**", "/api/v1/category"};
         String[] adminNeededDeletes = {"/api/v1/category/**", "/api/v1/category"};

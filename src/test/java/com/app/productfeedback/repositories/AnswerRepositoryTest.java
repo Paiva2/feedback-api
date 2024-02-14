@@ -33,4 +33,13 @@ public class AnswerRepositoryTest implements AnswerRepository {
         return handleAnswer;
     }
 
+    @Override
+    public Optional<Answer> findById(UUID answerId) {
+        return this.answers.stream().filter(answer -> answer.getId().equals(answerId)).findAny();
+    }
+
+    @Override
+    public void deleteById(UUID answerId) {
+        this.answers.removeIf(answer -> answer.getId().equals(answerId));
+    }
 }

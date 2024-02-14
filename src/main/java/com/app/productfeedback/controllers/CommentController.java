@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.app.productfeedback.dto.request.comment.NewCommentDto;
 import com.app.productfeedback.dto.request.comment.UpdateCommentDto;
-import com.app.productfeedback.entities.Comment;
 import com.app.productfeedback.services.comment.CommentService;
 import com.app.productfeedback.services.jwt.JwtService;
 
