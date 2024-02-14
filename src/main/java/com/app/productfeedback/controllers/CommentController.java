@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.app.productfeedback.dto.request.comment.NewCommentDto;
+import com.app.productfeedback.dto.request.comment.UpdateCommentDto;
+import com.app.productfeedback.entities.Comment;
 import com.app.productfeedback.services.comment.CommentService;
 import com.app.productfeedback.services.jwt.JwtService;
 
@@ -48,5 +50,17 @@ public class CommentController {
         this.commentService.delete(UUID.fromString(parseToken), commentId);
 
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Comment removed."));
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<Map<String, String>> updateComment(
+            @RequestBody @Valid UpdateCommentDto updateCommentDto,
+            @RequestHeader(required = true, name = "Authorization") String jwtToken) {
+        String parseToken = this.jwtService.verify(jwtToken.replaceAll("Bearer ", ""));
+
+        this.commentService.update(UUID.fromString(parseToken), updateCommentDto);
+
+        return ResponseEntity.status(201)
+                .body(Collections.singletonMap("message", "Comment updated!"));
     }
 }

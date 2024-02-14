@@ -3,20 +3,22 @@ package com.app.productfeedback.services.comment;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.app.productfeedback.entities.Comment;
 import com.app.productfeedback.entities.Feedback;
 import com.app.productfeedback.entities.User;
 import com.app.productfeedback.dto.request.comment.NewCommentDto;
+import com.app.productfeedback.dto.request.comment.UpdateCommentDto;
 import com.app.productfeedback.exceptions.BadRequestException;
+import com.app.productfeedback.exceptions.ForbiddenException;
 import com.app.productfeedback.exceptions.NotFoundException;
 import com.app.productfeedback.exceptions.UnauthorizedException;
 import com.app.productfeedback.interfaces.CommentRepository;
 import com.app.productfeedback.interfaces.FeedbackRepository;
 import com.app.productfeedback.interfaces.UserRepository;
 
-// UPDATE COMMENT
 @Service
 public class CommentService {
     private final UserRepository userRepository;
@@ -99,4 +101,42 @@ public class CommentService {
         this.commentRepository.deleteById(doesCommentExists.get().getId());
     }
 
+    public Comment update(UUID userId, UpdateCommentDto updateCommentDto) {
+        if (userId == null) {
+            throw new BadRequestException("Invalid user id.");
+        }
+
+        if (updateCommentDto == null) {
+            throw new BadRequestException("Invalid update comment dto.");
+        }
+
+        if (updateCommentDto.getId() == null) {
+            throw new BadRequestException("Invalid comment id.");
+        }
+
+        if (updateCommentDto.getComment() == null) {
+            throw new BadRequestException("New comment can't be empty.");
+        }
+
+        Optional<User> doesUserExists = this.userRepository.findById(userId);
+
+        if (doesUserExists.isEmpty()) {
+            throw new NotFoundException("User not found.");
+        }
+
+        Optional<Comment> doesCommentExists =
+                this.commentRepository.findById(UUID.fromString(updateCommentDto.getId()));
+
+        if (doesCommentExists.isEmpty()) {
+            throw new NotFoundException("Comment not found.");
+        }
+
+        if (!doesCommentExists.get().getUserId().equals(userId)) {
+            throw new ForbiddenException("Only comment owners can edit their own comments.");
+        }
+
+        BeanUtils.copyProperties(updateCommentDto, doesCommentExists.get());
+
+        return this.commentRepository.save(doesCommentExists.get());
+    }
 }
