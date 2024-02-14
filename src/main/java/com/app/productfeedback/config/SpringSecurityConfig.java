@@ -20,6 +20,7 @@ public class SpringSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         String[] authNeededGets = {"/api/v1/user/profile"};
         String[] authNeededPatchs = {"/api/v1/user/update"};
+        String[] authNeededDeletes = {"/api/v1/comment/remove/**"};
 
         String[] adminNeededPosts = {"/api/v1/category/**", "/api/v1/category"};
         String[] adminNeededDeletes = {"/api/v1/category/**", "/api/v1/category"};
@@ -30,6 +31,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, authNeededGets).authenticated();
                     authorize.requestMatchers(HttpMethod.PATCH, authNeededPatchs).authenticated();
+                    authorize.requestMatchers(HttpMethod.DELETE, authNeededDeletes).authenticated();
                     authorize.requestMatchers(HttpMethod.POST, adminNeededPosts).hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.DELETE, adminNeededDeletes)
                             .hasRole("ADMIN").anyRequest().permitAll();

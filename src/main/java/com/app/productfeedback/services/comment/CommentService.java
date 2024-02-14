@@ -11,22 +11,23 @@ import com.app.productfeedback.entities.User;
 import com.app.productfeedback.dto.request.comment.NewCommentDto;
 import com.app.productfeedback.exceptions.BadRequestException;
 import com.app.productfeedback.exceptions.NotFoundException;
+import com.app.productfeedback.exceptions.UnauthorizedException;
 import com.app.productfeedback.interfaces.CommentRepository;
 import com.app.productfeedback.interfaces.FeedbackRepository;
 import com.app.productfeedback.interfaces.UserRepository;
 
-// TODO: DELETE COMMENT / UPDATE COMMENT
+// UPDATE COMMENT
 @Service
 public class CommentService {
-    private final UserRepository UserRepository;
+    private final UserRepository userRepository;
 
     private final FeedbackRepository feedbackRepository;
 
     private final CommentRepository commentRepository;
 
-    public CommentService(UserRepository UserRepository, FeedbackRepository feedbackRepository,
+    public CommentService(UserRepository userRepository, FeedbackRepository feedbackRepository,
             CommentRepository commentRepository) {
-        this.UserRepository = UserRepository;
+        this.userRepository = userRepository;
         this.feedbackRepository = feedbackRepository;
         this.commentRepository = commentRepository;
     }
@@ -54,7 +55,7 @@ public class CommentService {
         }
 
         if (userId != null) {
-            Optional<User> doesUserExists = this.UserRepository.findById(userId);
+            Optional<User> doesUserExists = this.userRepository.findById(userId);
 
             if (doesUserExists.isEmpty()) {
                 throw new NotFoundException("User not found.");
@@ -68,4 +69,34 @@ public class CommentService {
 
         return this.commentRepository.save(newComment);
     }
+
+    public void delete(UUID userId, UUID commentId) {
+        if (commentId == null) {
+            throw new BadRequestException("Invalid comment id.");
+        }
+
+        if (userId == null) {
+            throw new BadRequestException("Only admins can manage comments made by guests.");
+        }
+
+        Optional<User> doesUserExists = this.userRepository.findById(userId);
+
+        if (doesUserExists.isEmpty()) {
+            throw new NotFoundException("User not found.");
+        }
+
+        Optional<Comment> doesCommentExists = this.commentRepository.findById(commentId);
+
+        if (doesCommentExists.isEmpty()) {
+            throw new NotFoundException("Comment not found.");
+        }
+
+        if (!doesCommentExists.get().getUserId().equals(userId)) {
+            throw new UnauthorizedException(
+                    "Only comment owners or admins can manage their own comments.");
+        }
+
+        this.commentRepository.deleteById(doesCommentExists.get().getId());
+    }
+
 }

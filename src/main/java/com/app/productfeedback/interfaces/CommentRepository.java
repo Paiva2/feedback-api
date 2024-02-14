@@ -6,7 +6,9 @@ import java.util.UUID;
 import com.app.productfeedback.entities.Comment;
 
 public interface CommentRepository {
-    Comment save(Comment feedback);
+    Comment save(Comment comment);
 
     Optional<Comment> findById(UUID commentId);
+
+    void deleteById(UUID commentId);
 }

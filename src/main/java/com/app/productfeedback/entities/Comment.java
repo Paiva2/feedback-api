@@ -33,16 +33,16 @@ public class Comment {
     private UUID feedbackId;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "fk_feedback_id", insertable = false, updatable = false)
     private Feedback feedback;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
+    @OneToMany(mappedBy = "comment")
     private List<Answer> answers;
 
     public UUID getId() {

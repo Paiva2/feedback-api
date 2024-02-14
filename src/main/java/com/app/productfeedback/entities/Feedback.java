@@ -50,12 +50,10 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @OneToOne
     @JoinColumn(name = "fk_category_id", insertable = false, updatable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
     public Feedback() {}

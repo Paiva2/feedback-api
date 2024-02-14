@@ -38,4 +38,15 @@ public class CommentController {
         return ResponseEntity.status(201)
                 .body(Collections.singletonMap("message", "Comment created!"));
     }
+
+    @DeleteMapping("remove/{commentId}")
+    public ResponseEntity<Map<String, String>> deleteComment(
+            @RequestHeader(name = "Authorization", required = true) String jwtToken,
+            @PathVariable(name = "commentId", required = true) UUID commentId) {
+        String parseToken = this.jwtService.verify(jwtToken.replaceAll("Bearer ", ""));
+
+        this.commentService.delete(UUID.fromString(parseToken), commentId);
+
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Comment removed."));
+    }
 }

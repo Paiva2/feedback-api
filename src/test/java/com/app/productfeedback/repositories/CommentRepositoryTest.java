@@ -41,4 +41,9 @@ public class CommentRepositoryTest implements CommentRepository {
                 .findFirst();
     }
 
+    @Override
+    public void deleteById(UUID commentId) {
+        this.comments.removeIf(comment -> comment.getId().equals(commentId));
+    }
+
 }
